@@ -6,3 +6,6 @@ StatelessWidgetクラスとは、その名の通り状態を持たないウィ�
 
 ## MaterialAppクラスについて
 MaterialAppクラスとは、マテリアルデザインによるウィジェットの作成を行います。マテリアルデザインとは異なるデバイス・プラットフォームによりユーザーが感じる見た目や感じ方などを同じものとする目的のもと、作られた視覚的デザイン言語と呼ばれています。
+
+## MainAxisAlignmentとCrossAxisAlignmentについて
+MainAxisAlignmentは、Columnなら縦方向の配置の操作で、Rowなら横方向の配置の操作
