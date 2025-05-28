@@ -10,3 +10,10 @@ MaterialAppクラスとは、マテリアルデザインによるウィジェッ
 ## MainAxisAlignmentとCrossAxisAlignmentについて
 MainAxisAlignmentは、Columnなら縦方向の配置の操作で、Rowなら横方向の配置の操作を行い、  
 CrossAxisAligmentは、Columnなら横方向の配置の操作で、Rowなら縦方向の配置の操作を行うものだとわかりました。
+
+# RawMaterialButtonについて
+これは設定が他の要因で影響を受けないボタンで、独立して自由に背景色などを好きなように設定することができます。
+
+# onPressedとonChangedについて
+onPressedはクリックされたときに処理が実行されるのに対して、onChangedは何かが変化すると処理が実行されます。  
+例えばテキストが変更したりなどリアルタイムに処理を実行することができます。
