@@ -12,12 +12,15 @@ MaterialAppクラスとは、マテリアルデザインによるウィジェッ
 MainAxisAlignmentは、Columnなら縦方向の配置の操作で、Rowなら横方向の配置の操作を行い、  
 CrossAxisAligmentは、Columnなら横方向の配置の操作で、Rowなら縦方向の配置の操作を行うものだとわかりました。
 
-# RawMaterialButtonについて
+## RawMaterialButtonについて
 これは設定が他の要因で影響を受けないボタンで、独立して自由に背景色などを好きなように設定することができます。
 
-# onPressedとonChangedについて
+## onPressedとonChangedについて
 onPressedはクリックされたときに処理が実行されるのに対して、onChangedは何かが変化すると処理が実行されます。  
 例えばテキストが変更したりなどリアルタイムに処理を実行することができます。
 
-# Navigatorクラスについて
-よくみたことあるやつ。ということは頻繁に使うということなので、コードを残しておく。[Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
+## Navigatorクラスについて
+よくみたことあるやつ。ということは使う頻度が高いってことなので、コードを残しておく。[Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
+
+## Drawerウィジェットについて
+これもGithubやYouTubeなんかでよく見るやつ。こちらも、色々なアプリやWebサイトなので見るくらい使う頻度が高いということなので、コードを残しておく。
