@@ -23,4 +23,5 @@ onPressedはクリックされたときに処理が実行されるのに対し�
 よくみたことあるやつ。ということは使う頻度が高いってことなので、コードを残しておく。[Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
 
 ## Drawerウィジェットについて
-これもGithubやYouTubeなんかでよく見るやつ。こちらも、色々なアプリやWebサイトなので見るくらい使う頻度が高いということなので、コードを残しておく。[Drawerウィジェット](https://github.com/9kaede12/MobileAppDev/blob/main/Drawer.dart)
+これもGithubやYouTubeなんかでよく見るやつ。  
+こちらも、色々なアプリやWebサイトなので見るくらい使う頻度が高いということなので、コードを残しておく。[Drawerウィジェット](https://github.com/9kaede12/MobileAppDev/blob/main/Drawer.dart)
