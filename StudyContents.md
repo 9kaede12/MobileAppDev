@@ -20,4 +20,4 @@ onPressedはクリックされたときに処理が実行されるのに対し�
 例えばテキストが変更したりなどリアルタイムに処理を実行することができます。
 
 # Navigatorクラスについて
-よくみたことあるやつ。
+よくみたことあるやつ。ということは頻繁に使うということなので、コードを残しておく。[Navigatorクラス](https://github.com/9kaede12/MobileAppDev#:~:text=10%20Commits-,Navigator.dart,-Create%20Navigator.dart)
