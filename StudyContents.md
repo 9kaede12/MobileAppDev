@@ -18,3 +18,6 @@ CrossAxisAligmentは、Columnなら横方向の配置の操作で、Rowなら縦
 # onPressedとonChangedについて
 onPressedはクリックされたときに処理が実行されるのに対して、onChangedは何かが変化すると処理が実行されます。  
 例えばテキストが変更したりなどリアルタイムに処理を実行することができます。
+
+# Navigatorクラスについて
+よくみたことあるやつ。
