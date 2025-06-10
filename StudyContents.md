@@ -25,3 +25,7 @@ onPressedはクリックされたときに処理が実行されるのに対し�
 ## Drawerウィジェットについて
 これもGithubやYouTubeなんかでよく見るやつ。  
 こちらも、色々なアプリやWebサイトなので見るくらい使う頻度が高いということなので、コードを残しておく。[Drawerウィジェット](https://github.com/9kaede12/MobileAppDev/blob/main/Drawer.dart)
+
+## Todoリストの作成
+[flutterstudio](https://flutterstudio.app/)を参考にウィジェットを選びました。ウィジェットを組み合わせていく上で、つまづいたところに関してはchatgptを活用して解決を行なっていきました。  
+実際のコードは[こちら](https://github.com/9kaede12/MobileAppDev/blob/main/TodoList.dart)です。
