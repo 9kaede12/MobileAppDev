@@ -20,7 +20,7 @@ onPressedはクリックされたときに処理が実行されるのに対し�
 例えばテキストが変更したりなどリアルタイムに処理を実行することができます。
 
 ## Navigatorクラスについて
-よくみたことあるやつ。ということは使う頻度が高いってことなので、コードを残しておく。[Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
+よくみたことあるやつ。ということは使う頻度がそれだけ高いってことなので、コードを残しておく。[Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
 
 ## Drawerウィジェットについて
 これもGithubやYouTubeなんかでよく見るやつ。  
@@ -30,3 +30,16 @@ onPressedはクリックされたときに処理が実行されるのに対し�
 [flutterstudio](https://flutterstudio.app/)を参考にウィジェットを選びました。  
 ウィジェットを組み合わせていく上で、つまづいたところに関してはchatgptを活用して解決を行なっていきました。  
 実際のコードは[こちら](https://github.com/9kaede12/MobileAppDev/blob/main/TodoList.dart)です。
+
+## Futureについて
+FutureとはFuture<File>やFuture<Directory>などで使われるもので、非同期メソッドの戻り値として返される特殊なオブジェクトです。
+
+## 保存先ディレクトリの取得
+<pre>final dir = await getApplicationDocumentsDirectory();</pre>
+`getApplicationDocumentsDirectory()` を使って、アプリ専用の「書き込み可能ディレクトリ」のパスを非同期で取得します。
+
+## 保存処理
+<pre>
+final jsonStr = jsonEncode(_tasks.map((t) => t.toJson()).toList());
+await file.writeAsString(jsonStr);
+</pre>
