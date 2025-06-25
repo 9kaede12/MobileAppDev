@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,7 +10,17 @@ void main() {
 class Task {
   String text;
   bool isDone;
+
   Task(this.text, {this.isDone = false});
+
+  Map<String, dynamic> toJson() => {
+    'text': text,
+    'isDone': isDone,
+  };
+
+  Task.fromJson(Map<String, dynamic> json)
+      : text = json['text'],
+        isDone = json['isDone'];
 }
 
 class MyApp extends StatelessWidget {
@@ -34,6 +47,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Task> _tasks = [];
   final TextEditingController _controller = TextEditingController();
+  final String _filename = 'tasks.json';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks(); // 起動時に読み込み
+  }
 
   @override
   void dispose() {
@@ -62,6 +82,53 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<File> _getLocalFile() async {
+    final dir = await getApplicationDocumentsDirectory();
+    return File('${dir.path}/$_filename');
+  }
+
+  Future<void> _saveTasks() async {
+    final file = await _getLocalFile();
+    final jsonStr = jsonEncode(_tasks.map((t) => t.toJson()).toList());
+    await file.writeAsString(jsonStr);
+    _showDialog("保存しました", "タスクをファイルに保存しました。");
+  }
+
+  Future<void> _loadTasks() async {
+    try {
+      final file = await _getLocalFile();
+      if (!(await file.exists())) {
+        _showDialog("読み込み失敗", "保存されたタスクが見つかりません。");
+        return;
+      }
+      final contents = await file.readAsString();
+      final jsonData = jsonDecode(contents);
+      setState(() {
+        _tasks.clear();
+        _tasks.addAll((jsonData as List).map((e) => Task.fromJson(e)));
+      });
+      _showDialog("読み込み成功", "タスクを読み込みました。");
+    } catch (e) {
+      _showDialog("エラー", "読み込み中にエラーが発生しました。\n$e");
+    }
+  }
+
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          ElevatedButton(
+            child: Text("OK"),
+            onPressed: () => Navigator.of(context).pop(),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +143,6 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 SizedBox(height: 20),
-                // タスクリスト表示（削除ボタン付き）
                 ..._tasks.asMap().entries.map((entry) {
                   final idx = entry.key;
                   final task = entry.value;
@@ -111,7 +177,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 }).toList(),
                 SizedBox(height: 20),
-                // 入力欄
                 TextField(
                   controller: _controller,
                   style: TextStyle(
@@ -125,7 +190,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 SizedBox(height: 10),
-                // 追加ボタン
                 ElevatedButton(
                   child: Text(
                     "＋",
@@ -137,6 +201,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   onPressed: buttonPressed,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Text("保存"),
+                        onPressed: _saveTasks,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Text("読み込み"),
+                        onPressed: _loadTasks,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
