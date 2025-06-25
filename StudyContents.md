@@ -38,8 +38,19 @@ FutureとはFuture<File>やFuture<Directory>などで使われるもので、非
 <pre>final dir = await getApplicationDocumentsDirectory();</pre>
 `getApplicationDocumentsDirectory()` を使って、アプリ専用の「書き込み可能ディレクトリ」のパスを非同期で取得します。
 
-## 保存処理
+## 保存処理について
 <pre>
 final jsonStr = jsonEncode(_tasks.map((t) => t.toJson()).toList());
 await file.writeAsString(jsonStr);
 </pre>
+タスクリスト `_tasks` を `toJson()` で Map のリストに変換し、`jsonEncode()` でJSON文字列に変換した後、ファイルに書き込んで保存します。保存完了後は `_showDialog()` によってユーザーに通知されます。
+
+## 読み込み処理について
+<pre>
+final contents = await file.readAsString();
+final jsonData = jsonDecode(contents);
+_tasks.clear();
+_tasks.addAll((jsonData as List).map((e) => Task.fromJson(e)));
+</pre>
+`tasks.json` を読み込んでJSON文字列を `List<Map>` にデコードし、各要素を `Task.fromJson()` で Task インスタンスに復元します。  
+その後 `_tasks` を更新し、`setState()` によってUIに反映されます。
