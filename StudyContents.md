@@ -83,10 +83,37 @@
 
 ## MaterialAppクラスについて
 <details>
-   <summary>内容</summary>
+  <summary>内容を見る</summary>
 
-   MaterialAppクラスとは、マテリアルデザインによるウィジェットの作成を行います。  
-   マテリアルデザインとは異なるデバイス・プラットフォームによりユーザーが感じる見た目や感じ方などを同じものとする目的のもと、作られた視覚的デザイン言語と呼ばれています。
+  `MaterialApp` は、Flutterでマテリアルデザインを適用したアプリケーションを作成するための基本ウィジェットです。  
+  画面全体のテーマ設定やナビゲーション、ローカライズなどの機能を包括的に提供します。
+  
+  ---
+  
+  ### 主な役割・特徴
+  
+  - マテリアルデザインに基づいたUIコンポーネントの提供  
+  - アプリのテーマ設定（色、フォントなど）の管理  
+  - ルーティング（画面遷移）を簡単に設定可能  
+  - ローカライズ（多言語対応）機能のサポート  
+  - アプリ全体の設定を一括管理
+  
+  ---
+  
+  ### 使用例
+  
+  ```dart
+  MaterialApp(
+    title: 'Flutter Demo',
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+    home: MyHomePage(),
+    routes: {
+      '/settings': (context) => SettingsPage(),
+    },
+  );
+  ```
 </details>
 
 ## MainAxisAlignmentとCrossAxisAlignmentについて
