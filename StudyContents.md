@@ -9,6 +9,58 @@
    また一度描画されると、変更が加わらない限り再描画されても同じウィジェットが表示されます。  
 </details>
 
+## StatefulWidgetクラスについて
+<details>
+  <summary>内容を見る</summary>
+
+   `StatefulWidget` は、状態（State）を持つウィジェットです。  
+   ユーザーの操作や時間の経過によって、ウィジェットの内容を変化させたいときに使用します。
+   
+   ---
+   
+   ### 構成
+   
+   `StatefulWidget` は2つのクラスに分かれて構成されます。
+   
+   1. `StatefulWidget` 本体クラス  
+      → ウィジェットのエントリーポイント  
+   2. `State` クラス  
+      → 実際の状態管理とUI描画を行う `build()` メソッドを持つ
+   
+   ---
+   
+   ### 使用例
+   
+   ```dart
+   class CounterPage extends StatefulWidget {
+     @override
+     _CounterPageState createState() => _CounterPageState();
+   }
+   
+   class _CounterPageState extends State<CounterPage> {
+     int _counter = 0;
+   
+     void _increment() {
+       setState(() {
+         _counter++;
+       });
+     }
+   
+     @override
+     Widget build(BuildContext context) {
+       return Scaffold(
+         appBar: AppBar(title: Text('カウンター')),
+         body: Center(child: Text('$_counter', style: TextStyle(fontSize: 32))),
+         floatingActionButton: FloatingActionButton(
+           onPressed: _increment,
+           child: Icon(Icons.add),
+         ),
+       );
+     }
+   }
+   ```
+</details>
+
 ## MaterialAppクラスについて
 <details>
    <summary>内容</summary>
