@@ -116,19 +116,79 @@
   ```
 </details>
 
-## MainAxisAlignmentとCrossAxisAlignmentについて
+## MainAxisAlignment と CrossAxisAlignment について
+
 <details>
-   <summary>内容</summary>
-   
-   MainAxisAlignmentは、Columnなら縦方向の配置の操作で、Rowなら横方向の配置の操作を行い、  
-   CrossAxisAligmentは、Columnなら横方向の配置の操作で、Rowなら縦方向の配置の操作を行うものだとわかりました。
+  <summary>内容を見る</summary>
+
+Flutterのレイアウトウィジェット、特に `Row` と `Column` の中で、子ウィジェットの配置を制御するためのプロパティです。
+
+---
+
+### MainAxisAlignment
+
+- `Row` の場合：**水平方向（横方向）**の配置を制御  
+- `Column` の場合：**垂直方向（縦方向）**の配置を制御
+
+例：
+
+- `MainAxisAlignment.start`：先頭から詰める  
+- `MainAxisAlignment.center`：中央に配置  
+- `MainAxisAlignment.end`：末尾に配置  
+- `MainAxisAlignment.spaceBetween`：両端に寄せ、間隔を均等に空ける  
+- `MainAxisAlignment.spaceAround`：間隔を均等に空ける（両端も余白あり）  
+- `MainAxisAlignment.spaceEvenly`：均等な間隔で配置
+
+---
+
+### CrossAxisAlignment
+
+- `Row` の場合：**垂直方向（縦方向）**の配置を制御  
+- `Column` の場合：**水平方向（横方向）**の配置を制御
+
+例：
+
+- `CrossAxisAlignment.start`：クロス軸の開始側に揃える  
+- `CrossAxisAlignment.center`：クロス軸の中央に揃える  
+- `CrossAxisAlignment.end`：クロス軸の終了側に揃える  
+- `CrossAxisAlignment.stretch`：子ウィジェットをクロス軸方向に引き伸ばす
+
+---
+
+### まとめ
+
+| プロパティ名          | Rowの場合の軸 | Columnの場合の軸 | 説明                      |
+|----------------------|---------------|-----------------|---------------------------|
+| MainAxisAlignment    | 横方向        | 縦方向          | 主軸方向の子ウィジェット配置 |
+| CrossAxisAlignment   | 縦方向        | 横方向          | 主軸と垂直の方向（交差軸）の子ウィジェット配置 |
+
 </details>
 
 ## RawMaterialButtonについて
-<details>
-   <summary>内容</summary>
 
-   これは設定が他の要因で影響を受けないボタンで、独立して自由に背景色などを好きなように設定することができます。
+<details>
+  <summary>内容を見る</summary>
+
+`RawMaterialButton`はFlutterのボタンの中でも自由度が高く、  
+デフォルトのスタイルに依存せずに背景色や形状、影などを細かくカスタマイズできるボタンウィジェットです。
+
+- 他の標準ボタン（ElevatedButtonなど）とは異なり、スタイルがほぼ無い状態で提供される  
+- デザインをゼロから自由に作りたいときに便利
+
+### 使用例
+
+```dart
+RawMaterialButton(
+  onPressed: () {
+    print('Pressed');
+  },
+  fillColor: Colors.blue,        // 背景色
+  shape: CircleBorder(),         // 円形にする
+  elevation: 4.0,                // 影の深さ
+  padding: EdgeInsets.all(16.0), // 内側の余白
+  child: Icon(Icons.add, color: Colors.white),
+)
+```
 </details>
 
 ## onPressedとonChangedについて
