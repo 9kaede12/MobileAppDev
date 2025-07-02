@@ -2,11 +2,33 @@
 
 ## StatelessWidgetクラスについて
 <details>
-   <summary>内容</summary>
+  <summary>内容を見る</summary>
+
+   `StatelessWidget` は、**状態を持たないウィジェット**です。  
+   表示内容が固定されていて、ユーザー操作やアプリの状態変化によって変わらない場合に使います。
    
-   StatelessWidgetクラスとは、その名の通り状態を持たないウィジェットのことです。  
-   状態を保持しないため、アプリなどを使用するユーザーからは変更できないウィジェットが表示されます。   
-   また一度描画されると、変更が加わらない限り再描画されても同じウィジェットが表示されます。  
+   ---
+   
+   - 一度描画されたら、基本的に再描画されても同じ内容を表示する
+   - 状態を持たないため、処理がシンプルで軽量
+   - ボタンやテキスト、アイコンなどの静的な要素に向いている
+   
+   ---
+   
+   ### 使用例
+   
+   ```dart
+   class GreetingWidget extends StatelessWidget {
+     final String message;
+   
+     GreetingWidget({required this.message});
+   
+     @override
+     Widget build(BuildContext context) {
+       return Text(message, style: TextStyle(fontSize: 24));
+     }
+   }
+   ```
 </details>
 
 ## StatefulWidgetクラスについて
@@ -17,8 +39,6 @@
    ユーザーの操作や時間の経過によって、ウィジェットの内容を変化させたいときに使用します。
    
    ---
-   
-   ### 構成
    
    `StatefulWidget` は2つのクラスに分かれて構成されます。
    
