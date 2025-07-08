@@ -191,27 +191,103 @@ RawMaterialButton(
 ```
 </details>
 
-## onPressedとonChangedについて
+## onPressed と onChanged について
+
 <details>
-   <summary>内容</summary>
-   
-   onPressedはクリックされたときに処理が実行されるのに対して、onChangedは何かが変化すると処理が実行されます。  
-   例えばテキストが変更したりなどリアルタイムに処理を実行することができます。
+  <summary>内容を見る</summary>
+
+  Flutterでは、ユーザーの操作に応じて処理を実行するために `onPressed` や `onChanged` などのイベントハンドラを使用します。  
+  この2つはよく使われるが、**発火のタイミングと用途が異なる**点に注意が必要です。
+  
+  ---
+  
+  ### onPressed
+  
+  - **ボタンなどのウィジェットが押されたとき**に呼び出されるイベント
+  - 例えば `ElevatedButton` や `IconButton`、`RawMaterialButton` などで使用される
+  
+  ```dart
+  ElevatedButton(
+    onPressed: () {
+      print("ボタンが押されました");
+    },
+    child: Text("押す"),
+  )
+  ```
 </details>
 
 ## Navigatorクラスについて
-<details>
-   <summary>内容</summary>
 
-   よくみたことあるやつ。ということは使う頻度がそれだけ高いってことなので、コードを残しておく。[Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
+<details>
+  <summary>内容を見る</summary>
+
+  `Navigator` クラスは、Flutterで画面遷移（ページ遷移）を行うために使われるウィジェットです。  
+  スタック構造（LIFO）を使ってページを管理しており、新しい画面を「積み上げる（push）」、戻るときに「取り出す（pop）」という操作を行います。
+  
+  ---
+  
+  ### 基本的な使い方
+  
+  #### 画面を遷移する（push）
+  
+  ```dart
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => SecondPage()),
+  );
+  ```
+
+  #### 画面を戻る（pop）
+  ```dart
+  Navigator.pop(context);
+  ```
+
+   [Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
 </details>
 
 ## Drawerウィジェットについて
-<details>
-   <summary>内容</summary>
 
-   これもGithubやYouTubeなんかでよく見るやつ。  
-   こちらも、色々なアプリやWebサイトなので見るくらい使う頻度が高いということなので、コードを残しておく。[Drawerウィジェット](https://github.com/9kaede12/MobileAppDev/blob/main/Drawer.dart)
+<details>
+  <summary>内容を見る</summary>
+
+  `Drawer` ウィジェットは、アプリの**サイドメニュー（ナビゲーションドロワー）**を実装するためのFlutter標準のウィジェットです。  
+  画面の左端または右端からスワイプ、あるいはアイコンをタップすることで表示され、  
+  **ナビゲーション機能**や**ユーザー設定項目**などを一覧としてまとめる場面でよく使われます。
+  
+  ---
+  
+  ### 特徴
+  
+  - アプリ上部の `AppBar` にメニューアイコン（ハンバーガーアイコン）を表示して開閉することが多い
+  - `ListView`, `ListTile`, `UserAccountsDrawerHeader` などと組み合わせて使うことで柔軟なメニュー構成が可能
+  - ユーザーが画面をスワイプするだけでアクセスできる利便性の高いUIパターン
+  
+  ---
+  
+  ### 使用例（簡略）
+  
+  ```dart
+  Scaffold(
+    appBar: AppBar(title: Text('Home')),
+    drawer: Drawer(
+      child: ListView(
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(color: Colors.blue),
+            child: Text('メニュー', style: TextStyle(color: Colors.white)),
+          ),
+          ListTile(
+            title: Text('ホーム'),
+            onTap: () {
+              // ナビゲーション処理
+            },
+          ),
+        ],
+      ),
+    ),
+    body: Center(child: Text('メイン画面')),
+  )
+  ```
 </details>
 
 ## Todoリストの作成
@@ -231,43 +307,116 @@ RawMaterialButton(
    実際のコードは[こちら](https://github.com/9kaede12/MobileAppDev/blob/main/TodoList.dart)です。
 </details>
 
-## Futureについて
-<details>
-   <summary>内容</summary>
+## Future について
 
-   FutureとはFuture<File>やFuture<Directory>などで使われるもので、非同期メソッドの戻り値として返される特殊なオブジェクトです。
+<details>
+  <summary>内容を見る</summary>
+
+  `Future` は、**非同期処理の結果を後から受け取るためのオブジェクト**です。  
+  例えば、ファイルの読み書きやネットワーク通信、時間のかかる処理など、即座に値を返せない関数に使われます。
+  
+  ---
+  
+  ### 特徴
+  
+  - `Future<T>` は「将来的に `T` 型の値を返す予定」という意味
+    - 例：`Future<String>`、`Future<File>`、`Future<Directory>` など
+  - 実際の処理完了までに時間がかかるため、`await` を使って待つのが基本
+  
+  ---
+  
+  ### 使用例
+  
+  #### 非同期メソッドの定義
+  
+  ```dart
+  Future<String> fetchMessage() async {
+    await Future.delayed(Duration(seconds: 2));
+    return "取得完了";
+  }
+  ```
 </details>
 
 ## 保存先ディレクトリの取得
-<details>
-   <summary>内容</summary>
 
-   <pre>final dir = await getApplicationDocumentsDirectory();</pre>
-   `getApplicationDocumentsDirectory()` を使って、アプリ専用の「書き込み可能ディレクトリ」のパスを非同期で取得します。
+<details>
+  <summary>内容を見る</summary>
+
+  Flutterアプリで**ファイルの読み書き**を行う際には、ユーザーがアクセスできるディレクトリではなく、  
+  アプリ専用の「**書き込み可能なディレクトリ**」を使う必要があります。
+  
+  そのために使うのが、`path_provider` パッケージの `getApplicationDocumentsDirectory()` メソッドです。
+  
+  ---
+  
+  ### 使用例
+  
+  ```dart
+  import 'package:path_provider/path_provider.dart';
+  
+  Future<void> getDirectoryPath() async {
+    final dir = await getApplicationDocumentsDirectory();
+    print('保存先ディレクトリ: ${dir.path}');
+  }
+  ```
+  このコードでは、非同期でディレクトリを取得し、アプリ内のファイル保存場所として使用できます。
+
 </details>
 
 ## 保存処理について
+
 <details>
-   <summary>内容</summary>
-   
-   <pre>
-   final jsonStr = jsonEncode(_tasks.map((t) => t.toJson()).toList());
-   await file.writeAsString(jsonStr);
-   </pre>
-   タスクリスト `_tasks` を `toJson()` で Map のリストに変換し、`jsonEncode()` でJSON文字列に変換した後、ファイルに書き込んで保存します。保存完了後は `_showDialog()` によってユーザーに通知されます。
+  <summary>内容を見る</summary>
+
+  Flutterアプリでタスクリストなどのデータをローカルに保存する際、  
+  データを **JSON形式** に変換してテキストファイルに書き込むのが一般的です。
+  
+  以下はその一例です。
+  
+  ---
+  
+  ### 処理内容
+  
+  1. `List<Task>` → `List<Map<String, dynamic>>` に変換（`toJson()`）
+  2. それを `jsonEncode()` で文字列に変換
+  3. ファイルに書き込む（`writeAsString()`）
+  
+  ---
+  
+  ### 保存処理のコード例
+  
+  ```dart
+  final jsonStr = jsonEncode(_tasks.map((t) => t.toJson()).toList());
+  await file.writeAsString(jsonStr);
+  ```
 </details>
 
 ## 読み込み処理について
-<details>
-   <summary>内容</summary>
-   
-   <pre>
-   final contents = await file.readAsString();
-   final jsonData = jsonDecode(contents);
-   _tasks.clear();
-   _tasks.addAll((jsonData as List).map((e) => Task.fromJson(e)));
-   </pre>
-   `tasks.json` を読み込んでJSON文字列を `List<Map>` にデコードし、各要素を `Task.fromJson()` で Task インスタンスに復元します。  
-   その後 `_tasks` を更新し、`setState()` によってUIに反映されます。
-</details>
 
+<details>
+  <summary>内容を見る</summary>
+
+  Flutterアプリで保存したJSONファイルからタスクリストを読み込む際の基本的な処理です。
+  
+  ---
+  
+  ### 処理の流れ
+  
+  1. ファイルを非同期でテキストとして読み込む  
+  2. 読み込んだJSON文字列を `jsonDecode()` で `List<Map>` に変換  
+  3. 各Mapを `Task.fromJson()` で `Task` インスタンスに復元  
+  4. 既存の `_tasks` リストをクリアし、新しいタスク群で更新  
+  5. `setState()` を呼んでUIを更新
+  
+  ---
+  
+  ### コード例
+  
+  ```dart
+  final contents = await file.readAsString();
+  final jsonData = jsonDecode(contents);
+  _tasks.clear();
+  _tasks.addAll((jsonData as List).map((e) => Task.fromJson(e)));
+  setState(() {});
+  ```
+</detalis>
