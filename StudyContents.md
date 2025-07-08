@@ -419,4 +419,14 @@ RawMaterialButton(
   _tasks.addAll((jsonData as List).map((e) => Task.fromJson(e)));
   setState(() {});
   ```
-</detalis>
+</details>
+
+## Firebaseについて
+<details>
+  <summary>内容を見る</summary>
+
+  FirebaseはFlutterと同じくGoogleが中心となって開発を進めているため、相性の良い組み合わせと言えます。
+
+  ### Firebaseに登録
+  Firebaseにアカウント登録していない場合は、[Firebase](https://firebase.google.com/?hl=ja) このリンクから登録ができます。
+</details>
