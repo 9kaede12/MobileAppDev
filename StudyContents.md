@@ -4,15 +4,13 @@
 <details>
   <summary>内容をみる</summary>
 
-  [Material Design](https://m3.material.io/) は Google によって設計されたデザインシステムであり、Flutter ではこれをベースとした UI コンポーネントが豊富に用意されています。
-  
-  Flutterは `MaterialApp` や `Scaffold` など、マテリアルデザインを前提としたウィジェットを多数提供しており、AndroidだけでなくiOSでも一貫性のあるUIが構築可能です。
+  Flutter は Google が提供する UI フレームワークであり、マテリアルデザイン（Material Design）を標準で採用しています。`MaterialApp`、`Scaffold`、`AppBar` などのウィジェットが提供されており、視覚的一貫性と操作性を保った UI を構築できます。
   
   ---
   
-  主な構成要素
+  ## MaterialApp
   
-  Flutter アプリのエントリーポイント。テーマやルーティングの設定が可能。
+  アプリ全体のテーマやナビゲーション設定を担うウィジェットです。
   
   ```dart
   void main() {
@@ -25,6 +23,144 @@
     ));
   }
   ```
+  
+  ---
+  
+  ## Scaffold
+  
+  マテリアルデザインの基本レイアウト構造を提供するウィジェットです。
+  
+  ```dart
+  Scaffold(
+    appBar: AppBar(title: Text('ホーム')),
+    body: Center(child: Text('ようこそ！')),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {},
+      child: Icon(Icons.add),
+    ),
+  );
+  ```
+  
+  ---
+  
+  ## AppBar
+  
+  画面上部に表示されるアプリバーです。タイトルやアクションアイコンを含めることができます。
+  
+  ```dart
+  AppBar(
+    title: Text('タイトル'),
+    actions: [
+      IconButton(
+        icon: Icon(Icons.search),
+        onPressed: () {},
+      ),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## FloatingActionButton
+  
+  主なアクションを強調するために使用される円形ボタンです。
+  
+  ```dart
+  FloatingActionButton(
+    onPressed: () {
+      // アクション処理
+    },
+    child: Icon(Icons.add),
+  )
+  ```
+  
+  ---
+  
+  ## ボタンの種類
+  
+  ```dart
+  TextButton(
+    onPressed: () {},
+    child: Text('Text Button'),
+  )
+  
+  ElevatedButton(
+    onPressed: () {},
+    child: Text('Elevated Button'),
+  )
+  
+  OutlinedButton(
+    onPressed: () {},
+    child: Text('Outlined Button'),
+  )
+  ```
+  
+  ---
+  
+  ## ThemeData と ColorScheme
+  
+  アプリ全体の見た目を設定できます。
+  
+  ```dart
+  MaterialApp(
+    theme: ThemeData(
+      primarySwatch: Colors.indigo,
+      brightness: Brightness.light,
+    ),
+  )
+  ```
+  
+  ColorScheme を使ったカスタマイズ：
+  
+  ```dart
+  theme: ThemeData(
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+  )
+  ```
+  
+  ---
+  
+  ## Material 3 (Material You) の利用
+  
+  Flutter 3.0以降、Material 3 に対応したテーマ指定が可能です。
+  
+  ```dart
+  MaterialApp(
+    theme: ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+    ),
+  )
+  ```
+  
+  ---
+  
+  ## よく使うマテリアルウィジェット
+  
+  | ウィジェット名 | 説明 |
+  |----------------|------|
+  | Card           | 情報のまとまりを示すカード表示 |
+  | ListTile       | リスト表示のための標準ウィジェット |
+  | Dialog         | ポップアップダイアログ |
+  | SnackBar       | 画面下部に一時的に表示される通知 |
+  | Drawer         | ナビゲーションドロワー（サイドメニュー） |
+  
+  ---
+  
+  ## その他の注意点
+  
+  - Cupertino ウィジェットとの併用も可能。
+  - Flutter Web やデスクトップでもマテリアルデザインをそのまま適用可能。
+  - `MaterialApp.router` を使うことで Navigator 2.0 による高度なルーティングが可能。
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://m3.material.io/
+  - https://api.flutter.dev/flutter/material/material-library.html
+  - https://docs.flutter.dev/cookbook/design/themes
+
 </details>
 
 ## コンストラクタについて
@@ -178,32 +314,103 @@
 ## StatelessWidgetクラスについて
 <details>
   <summary>内容を見る</summary>
+  
+  Flutter では UI を構築するために Widget クラスを継承してウィジェットを定義します。その中でも `StatelessWidget` は状態を持たないウィジェットを定義する際に使います。
+  
+  `StatelessWidget` は、**一度生成されると不変な UI コンポーネント**を表します。状態（State）を持たないため、ユーザーの操作などによって UI を変化させる必要がないときに使用します。
+  
+  ---
+  
+  ## 最小の StatelessWidget の例
+  
+  ```dart
+  import 'package:flutter/material.dart';
+  
+  void main() {
+    runApp(MyApp());
+  }
+  
+  class MyApp extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp(
+        title: 'Stateless Demo',
+        home: MyHomePage(),
+      );
+    }
+  }
+  
+  class MyHomePage extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(title: Text('ホーム')),
+        body: Center(
+          child: Text('これは StatelessWidget の例です'),
+        ),
+      );
+    }
+  }
+  ```
+  
+  ---
+  
+  ## 特徴
+  
+  - クラスは `StatelessWidget` を継承する
+  - `build(BuildContext context)` メソッドをオーバーライドする
+  - UI を返す
+  - 外部から受け取ったパラメータ（final）で UI を構築する
+  
+  ---
+  
+  ## プロパティ付きの例
+  
+  ```dart
+  class Greeting extends StatelessWidget {
+    final String name;
+  
+    const Greeting({required this.name});
+  
+    @override
+    Widget build(BuildContext context) {
+      return Text('こんにちは、$name さん');
+    }
+  }
+  ```
+  
+  使用例：
+  
+  ```dart
+  Greeting(name: '太郎');
+  ```
+  
+  ---
+  
+  ## StatelessWidget と StatefulWidget の違い
+  
+  | 比較項目       | StatelessWidget                   | StatefulWidget                    |
+  |----------------|-----------------------------------|-----------------------------------|
+  | 状態管理       | 不可（変更なし）                  | 可能（setStateで変更）            |
+  | UIの更新        | 外部からの変更でのみ               | 内部状態の変化でUI更新が可能       |
+  | パフォーマンス | 高い                              | 状態更新のたびに再構築が必要       |
+  | 用途例         | ラベルやアイコン、ボタンなど      | 入力フォーム、タブ、アニメーションなど |
+  
+  ---
+  
+  ## StatelessWidget が適している場面
+  
+  - 静的なテキストや画像表示
+  - 表示内容がプロパティのみで決まる UI
+  - 一度表示すれば変更されないウィジェット
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html
+  - https://docs.flutter.dev/development/ui/widgets-intro
 
-   `StatelessWidget` は、**状態を持たないウィジェット**です。  
-   表示内容が固定されていて、ユーザー操作やアプリの状態変化によって変わらない場合に使います。
-   
-   ---
-   
-   - 一度描画されたら、基本的に再描画されても同じ内容を表示する
-   - 状態を持たないため、処理がシンプルで軽量
-   - ボタンやテキスト、アイコンなどの静的な要素に向いている
-   
-   ---
-   
-   ### 使用例
-   
-   ```dart
-   class GreetingWidget extends StatelessWidget {
-     final String message;
-   
-     GreetingWidget({required this.message});
-   
-     @override
-     Widget build(BuildContext context) {
-       return Text(message, style: TextStyle(fontSize: 24));
-     }
-   }
-   ```
 </details>
 
 ## StatefulWidgetクラスについて
