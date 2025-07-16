@@ -416,92 +416,210 @@
 ## StatefulWidgetクラスについて
 <details>
   <summary>内容を見る</summary>
+  
+  Flutter では、状態（State）を持つウィジェットを作成するときに `StatefulWidget` クラスを使います。`StatefulWidget` はユーザー操作やデータの変化に応じて UI を動的に更新できるウィジェットです。
+  
+  ---
+  
+  ## StatefulWidget の基本構造
+  
+  `StatefulWidget` は2つのクラスで構成されます。
+  
+  1. `StatefulWidget` クラス本体（不変部分）  
+  2. 状態を管理する `State` クラス（可変部分）
+  
+  ---
+  
+  ## 最小の StatefulWidget の例
+  
+  ```dart
+  import 'package:flutter/material.dart';
+  
+  void main() {
+    runApp(MyApp());
+  }
+  
+  class MyApp extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp(
+        title: 'Stateful Demo',
+        home: CounterPage(),
+      );
+    }
+  }
+  
+  class CounterPage extends StatefulWidget {
+    @override
+    _CounterPageState createState() => _CounterPageState();
+  }
+  
+  class _CounterPageState extends State<CounterPage> {
+    int _counter = 0;
+  
+    void _increment() {
+      setState(() {
+        _counter++;  // 状態を更新するとUIが再構築される
+      });
+    }
+  
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(title: Text('StatefulWidgetの例')),
+        body: Center(
+          child: Text(
+            'ボタンが押された回数: $_counter',
+            style: TextStyle(fontSize: 24),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _increment,
+          child: Icon(Icons.add),
+        ),
+      );
+    }
+  }
+  ```
+  
+  ---
+  
+  ## 特徴
+  
+  - `StatefulWidget` は不変であり、実際の状態の変更は `State` クラス内で管理
+  - 状態を変化させたいときは `setState()` メソッドを呼び出す
+  - `setState()` を呼ぶと `build()` が再実行され、UIが更新される
+  
+  ---
+  
+  ## `StatefulWidget` と `StatelessWidget` の違い
+  
+  | 項目                 | StatefulWidget                     | StatelessWidget                   |
+  |----------------------|----------------------------------|---------------------------------|
+  | 状態の有無           | 状態を持ち、変更可能              | 状態を持たず不変                 |
+  | UIの更新トリガー     | `setState()`で状態を変更すると再構築 | プロパティが変わったときのみ再構築 |
+  | 用途例               | 入力フォーム、カウンター、アニメーション | 静的テキストや画像、アイコン     |
+  
+  ---
+  
+  ## 状態を持つウィジェット作成のポイント
+  
+  - `StatefulWidget` クラスは不変で軽量にする  
+  - 状態を持つロジックは必ず `State` クラスに書く  
+  - UIの再描画は `setState()` で通知する
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html  
+  - https://docs.flutter.dev/development/ui/interactive  
 
-   `StatefulWidget` は、状態（State）を持つウィジェットです。  
-   ユーザーの操作や時間の経過によって、ウィジェットの内容を変化させたいときに使用します。
-   
-   ---
-   
-   `StatefulWidget` は2つのクラスに分かれて構成されます。
-   
-   1. `StatefulWidget` 本体クラス  
-      → ウィジェットのエントリーポイント  
-   2. `State` クラス  
-      → 実際の状態管理とUI描画を行う `build()` メソッドを持つ
-   
-   ---
-
-   なぜ setState() が必要か  
-   Flutter は状態が変更されたことを自動では検出しません。  
-   手動で setState() を呼び出して「UIを更新してください」と伝える必要があります。
-
-   ---
-   
-   ### 使用例
-   
-   ```dart
-   class CounterPage extends StatefulWidget {
-     @override
-     _CounterPageState createState() => _CounterPageState();
-   }
-   
-   class _CounterPageState extends State<CounterPage> {
-     int _counter = 0;
-   
-     void _increment() {
-       setState(() {
-         _counter++;
-       });
-     }
-   
-     @override
-     Widget build(BuildContext context) {
-       return Scaffold(
-         appBar: AppBar(title: Text('カウンター')),
-         body: Center(child: Text('$_counter', style: TextStyle(fontSize: 32))),
-         floatingActionButton: FloatingActionButton(
-           onPressed: _increment,
-           child: Icon(Icons.add),
-         ),
-       );
-     }
-   }
-   ```
 </details>
 
 ## MaterialAppクラスについて
 <details>
   <summary>内容を見る</summary>
 
-  `MaterialApp` は、Flutterでマテリアルデザインを適用したアプリケーションを作成するための基本ウィジェットです。  
-  画面全体のテーマ設定やナビゲーション、ローカライズなどの機能を包括的に提供します。
+  `MaterialApp` は Flutter のマテリアルデザインアプリのルートとなるウィジェットです。アプリ全体のテーマ設定やナビゲーション、ローカライズなど、多くの機能を一元的に管理します。
   
   ---
   
-  ### 主な役割・特徴
+  ## 主な役割と特徴
   
-  - マテリアルデザインに基づいたUIコンポーネントの提供  
-  - アプリのテーマ設定（色、フォントなど）の管理  
-  - ルーティング（画面遷移）を簡単に設定可能  
-  - ローカライズ（多言語対応）機能のサポート  
-  - アプリ全体の設定を一括管理
+  - アプリのタイトルやテーマを設定する
+  - ルーティング（画面遷移）の管理
+  - ローカライズ（多言語対応）の設定
+  - マテリアルデザインの基本設定をまとめる
+  - デフォルトのフォントやスタイルを提供
   
   ---
   
-  ### 使用例
+  ## 基本的な使い方
+  
+  ```dart
+  import 'package:flutter/material.dart';
+  
+  void main() {
+    runApp(MaterialApp(
+      title: 'My Flutter App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    ));
+  }
+  
+  class MyHomePage extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('ホーム'),
+        ),
+        body: Center(
+          child: Text('MaterialAppの基本例'),
+        ),
+      );
+    }
+  }
+  ```
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名        | 説明                                        |
+  |--------------------|---------------------------------------------|
+  | `title`            | アプリのタイトル（主にタスクスイッチャーに表示） |
+  | `theme`            | アプリ全体のテーマを設定（色やフォントなど）       |
+  | `darkTheme`        | ダークモード時のテーマ設定                       |
+  | `themeMode`        | 明るいテーマとダークテーマの切替設定               |
+  | `home`             | 最初に表示するウィジェット                         |
+  | `routes`           | 名前付きルートのマップ（画面遷移先の登録）           |
+  | `initialRoute`     | 最初に表示するルートの名前                           |
+  | `navigatorKey`     | ナビゲーターのグローバルキー                         |
+  | `localizationsDelegates` | 多言語対応のためのローカライズデリゲート               |
+  | `debugShowCheckedModeBanner` | デバッグ時の「DEBUG」バナーの表示切替（falseで非表示）   |
+  | `useMaterial3`     | Material Design 3 (Material You) の有効化           |
+  
+  ---
+  
+  ## ルーティング例
   
   ```dart
   MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-    home: MyHomePage(),
+    initialRoute: '/',
     routes: {
+      '/': (context) => HomePage(),
       '/settings': (context) => SettingsPage(),
     },
-  );
+  )
   ```
+  
+  ---
+  
+  ## Material 3 の有効化
+  
+  Flutter 3.x以降では `useMaterial3` を true にすることで Material You デザインが適用されます。
+  
+  ```dart
+  MaterialApp(
+    theme: ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+    ),
+    home: MyHomePage(),
+  )
+  ```
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/MaterialApp-class.html  
+  - https://docs.flutter.dev/development/ui/widgets/material#materialapp
+
 </details>
 
 ## MainAxisAlignment と CrossAxisAlignment について
@@ -509,46 +627,90 @@
 <details>
   <summary>内容を見る</summary>
 
-Flutterのレイアウトウィジェット、特に `Row` と `Column` の中で、子ウィジェットの配置を制御するためのプロパティです。
-
----
-
-### MainAxisAlignment
-
-- `Row` の場合：**水平方向（横方向）**の配置を制御  
-- `Column` の場合：**垂直方向（縦方向）**の配置を制御
-
-例：
-
-- `MainAxisAlignment.start`：先頭から詰める  
-- `MainAxisAlignment.center`：中央に配置  
-- `MainAxisAlignment.end`：末尾に配置  
-- `MainAxisAlignment.spaceBetween`：両端に寄せ、間隔を均等に空ける  
-- `MainAxisAlignment.spaceAround`：間隔を均等に空ける（両端も余白あり）  
-- `MainAxisAlignment.spaceEvenly`：均等な間隔で配置
-
----
-
-### CrossAxisAlignment
-
-- `Row` の場合：**垂直方向（縦方向）**の配置を制御  
-- `Column` の場合：**水平方向（横方向）**の配置を制御
-
-例：
-
-- `CrossAxisAlignment.start`：クロス軸の開始側に揃える  
-- `CrossAxisAlignment.center`：クロス軸の中央に揃える  
-- `CrossAxisAlignment.end`：クロス軸の終了側に揃える  
-- `CrossAxisAlignment.stretch`：子ウィジェットをクロス軸方向に引き伸ばす
-
----
-
-### まとめ
-
-| プロパティ名          | Rowの場合の軸 | Columnの場合の軸 | 説明                      |
-|----------------------|---------------|-----------------|---------------------------|
-| MainAxisAlignment    | 横方向        | 縦方向          | 主軸方向の子ウィジェット配置 |
-| CrossAxisAlignment   | 縦方向        | 横方向          | 主軸と垂直の方向（交差軸）の子ウィジェット配置 |
+  Flutter のレイアウトウィジェット（特に `Row` や `Column`）でよく使う配置方法を指定するための列挙型です。
+  
+  ---
+  
+  ## MainAxisAlignment
+  
+  - メイン軸（`Row` の場合は水平方向、`Column` の場合は垂直方向）に沿った子ウィジェットの配置方法を指定します。
+  
+  ### 主な値
+  
+  | 値                   | 説明                             |
+  |----------------------|----------------------------------|
+  | `start`              | メイン軸の開始位置に揃える       |
+  | `end`                | メイン軸の終了位置に揃える       |
+  | `center`             | メイン軸の中央に揃える           |
+  | `spaceBetween`       | 子ウィジェット間のスペースを均等に配分（端は詰める） |
+  | `spaceAround`        | 子ウィジェット間のスペースを均等に配分（端も同等のスペース） |
+  | `spaceEvenly`        | 子ウィジェット間のスペースと端のスペースを均等に配分 |
+  
+  ### 例
+  
+  ```dart
+  Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text('左'),
+      Text('中央'),
+      Text('右'),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## CrossAxisAlignment
+  
+  - クロス軸（`Row` の場合は垂直方向、`Column` の場合は水平方向）に沿った子ウィジェットの配置方法を指定します。
+  
+  ### 主な値
+  
+  | 値                   | 説明                             |
+  |----------------------|----------------------------------|
+  | `start`              | クロス軸の開始位置に揃える       |
+  | `end`                | クロス軸の終了位置に揃える       |
+  | `center`             | クロス軸の中央に揃える           |
+  | `stretch`            | クロス軸方向に子ウィジェットを引き伸ばす（最大サイズ） |
+  | `baseline`           | 文字のベースラインに揃える（テキストがある場合） |
+  
+  ### 例
+  
+  ```dart
+  Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('左揃えテキスト1'),
+      Text('左揃えテキスト2'),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## Row と Column のメイン軸とクロス軸
+  
+  | ウィジェット | メイン軸           | クロス軸           |
+  |--------------|--------------------|--------------------|
+  | `Row`        | 水平方向（左右）    | 垂直方向（上下）    |
+  | `Column`     | 垂直方向（上下）    | 水平方向（左右）    |
+  
+  ---
+  
+  ## まとめ
+  
+  - `mainAxisAlignment` は子ウィジェットの**主方向**の配置を制御
+  - `crossAxisAlignment` は子ウィジェットの**直交方向**の配置を制御
+  - どちらも適切に設定することで柔軟なレイアウトが可能になる
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/rendering/MainAxisAlignment.html  
+  - https://api.flutter.dev/flutter/rendering/CrossAxisAlignment.html  
+  - https://docs.flutter.dev/development/ui/layout/tutorial#alignment-and-positioning
 
 </details>
 
@@ -557,26 +719,75 @@ Flutterのレイアウトウィジェット、特に `Row` と `Column` の中�
 <details>
   <summary>内容を見る</summary>
 
-`RawMaterialButton`はFlutterのボタンの中でも自由度が高く、  
-デフォルトのスタイルに依存せずに背景色や形状、影などを細かくカスタマイズできるボタンウィジェットです。
+  `RawMaterialButton` は Flutter のマテリアルデザインボタンの低レベルな構成ウィジェットです。  
+  `ElevatedButton` や `TextButton` のような高レベルのボタンウィジェットのカスタマイズ版として使われ、より自由に見た目や動作を細かく制御できます。
+  
+  ---
+  
+  ## 特徴
+  
+  - ボタンのビルドに必要な最低限の機能を持つ
+  - デフォルトのスタイルはなく、見た目を完全に自由にカスタマイズ可能
+  - サイズ、形状、色、影、マテリアルの効果を自分で設定する必要がある
+  - 高度なカスタムボタンを作りたいときに利用
+  
+  ---
+  
+  ## 基本的な使い方
+  
+  ```dart
+  RawMaterialButton(
+    onPressed: () {
+      print('RawMaterialButton pressed');
+    },
+    fillColor: Colors.blue,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    constraints: BoxConstraints(
+      minWidth: 100,
+      minHeight: 40,
+    ),
+    child: Text(
+      'カスタムボタン',
+      style: TextStyle(color: Colors.white),
+    ),
+  )
+  ```
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名      | 説明                                      |
+  |------------------|-------------------------------------------|
+  | `onPressed`      | ボタンが押されたときのコールバック       |
+  | `onLongPress`    | 長押し時のコールバック                    |
+  | `fillColor`      | ボタンの背景色                            |
+  | `shape`          | ボタンの形状（角丸や丸形など）            |
+  | `elevation`      | ボタンの影の高さ                          |
+  | `constraints`    | サイズの制約（最小・最大幅や高さ）        |
+  | `padding`        | 内側の余白                                |
+  | `child`          | ボタン内に表示するウィジェット            |
+  | `focusColor`     | フォーカス時の色                          |
+  | `hoverColor`     | ホバー時の色（Webやデスクトップ用）      |
+  | `highlightColor` | 押下時のハイライト色                      |
+  
+  ---
+  
+  ## 注意点
+  
+  - スタイルや動作を自分で細かく設定する必要があるため、通常は `ElevatedButton` などの高レベルボタンで十分な場合が多い
+  - `RawMaterialButton` はカスタムUIや特殊なアニメーションを実装したい場合に使うことが多い
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/RawMaterialButton-class.html  
+  - https://flutter.dev/docs/development/ui/widgets/material#rawmaterialbutton
 
-- 他の標準ボタン（ElevatedButtonなど）とは異なり、スタイルがほぼ無い状態で提供される  
-- デザインをゼロから自由に作りたいときに便利
 
-### 使用例
-
-```dart
-RawMaterialButton(
-  onPressed: () {
-    print('Pressed');
-  },
-  fillColor: Colors.blue,        // 背景色
-  shape: CircleBorder(),         // 円形にする
-  elevation: 4.0,                // 影の深さ
-  padding: EdgeInsets.all(16.0), // 内側の余白
-  child: Icon(Icons.add, color: Colors.white),
-)
-```
 </details>
 
 ## onPressed と onChanged について
@@ -584,24 +795,81 @@ RawMaterialButton(
 <details>
   <summary>内容を見る</summary>
 
-  Flutterでは、ユーザーの操作に応じて処理を実行するために `onPressed` や `onChanged` などのイベントハンドラを使用します。  
-  この2つはよく使われるが、**発火のタイミングと用途が異なる**点に注意が必要です。
+  Flutter のウィジェットでユーザー操作に応じて処理を行うために使うコールバック関数の代表例が `onPressed` と `onChanged` です。
   
   ---
   
-  ### onPressed
+  ## onPressed
   
-  - **ボタンなどのウィジェットが押されたとき**に呼び出されるイベント
-  - 例えば `ElevatedButton` や `IconButton`、`RawMaterialButton` などで使用される
+  - 主に **ボタン系ウィジェット**（`ElevatedButton`、`TextButton`、`IconButton`、`RawMaterialButton` など）で使用される  
+  - ボタンが「押されたとき」に呼ばれる関数（コールバック）を設定する  
+  - 型は `void Function()?`（戻り値なし、引数なしの関数）  
+  - `null` を渡すとボタンが無効化される（押せなくなる）
+  
+  ### 例
   
   ```dart
   ElevatedButton(
     onPressed: () {
-      print("ボタンが押されました");
+      print('ボタンが押されました');
     },
-    child: Text("押す"),
+    child: Text('押してね'),
   )
   ```
+  
+  ---
+  
+  ## onChanged
+  
+  - 主に **入力系ウィジェット**（`TextField`、`Slider`、`Switch`、`DropdownButton` など）で使われる  
+  - ユーザーが値を変更したときに呼ばれるコールバック  
+  - 型は変更対象に応じて異なるが、一般的には引数に新しい値を受け取り戻り値なしの関数  
+  
+  ### 例：TextField
+  
+  ```dart
+  TextField(
+    onChanged: (String value) {
+      print('入力値が変更されました: $value');
+    },
+  )
+  ```
+  
+  ### 例：Slider
+  
+  ```dart
+  Slider(
+    value: _currentValue,
+    min: 0,
+    max: 100,
+    onChanged: (double newValue) {
+      setState(() {
+        _currentValue = newValue;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 違いのまとめ
+  
+  | 項目         | onPressed                  | onChanged                          |
+  |--------------|----------------------------|----------------------------------|
+  | 対象ウィジェット | ボタン系                     | 入力系（TextField、Sliderなど）     |
+  | 呼び出しタイミング | ボタンが押された瞬間          | ユーザーが値を変更したとき           |
+  | 関数の引数    | なし                       | 新しい値（型はウィジェットによる）  |
+  | 役割         | イベントのトリガー           | 値の変更を監視・反映                |
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/ElevatedButton/onPressed.html  
+  - https://api.flutter.dev/flutter/widgets/TextField/onChanged.html  
+  - https://docs.flutter.dev/development/ui/interactive  
+
+
 </details>
 
 ## Navigatorクラスについて
@@ -609,28 +877,114 @@ RawMaterialButton(
 <details>
   <summary>内容を見る</summary>
 
-  `Navigator` クラスは、Flutterで画面遷移（ページ遷移）を行うために使われるウィジェットです。  
-  スタック構造（LIFO）を使ってページを管理しており、新しい画面を「積み上げる（push）」、戻るときに「取り出す（pop）」という操作を行います。
+   [Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
+   
+  `Navigator` は Flutter の画面遷移（ルーティング）を管理するクラスです。  
+  スタック構造を使い、画面（ページ）を積み重ねたり戻ったりする操作を扱います。
   
   ---
   
-  ### 基本的な使い方
+  ## 基本的な役割
   
-  #### 画面を遷移する（push）
+  - 新しい画面を「プッシュ（積む）」して遷移する  
+  - 現在の画面を「ポップ（取り除く）」して戻る  
+  - 画面遷移の履歴（スタック）を管理
+  
+  ---
+  
+  ## 画面遷移の基本例
   
   ```dart
+  // 画面Aから画面Bへ遷移する
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => SecondPage()),
+    MaterialPageRoute(builder: (context) => ScreenB()),
   );
-  ```
-
-  #### 画面を戻る（pop）
-  ```dart
+  
+  // 画面Bから前の画面に戻る
   Navigator.pop(context);
   ```
+  
+  ---
+  
+  ## push と pop の説明
+  
+  | メソッド       | 説明                        |
+  |----------------|-----------------------------|
+  | `push`         | 新しい画面をスタックに積む  |
+  | `pop`          | 現在の画面をスタックから外す（前の画面に戻る） |
+  | `pushReplacement` | 現在の画面を新しい画面で置き換える（戻れなくなる） |
+  | `pushNamed`    | 名前付きルートで遷移する    |
+  | `popUntil`     | 指定した条件の画面まで戻る  |
+  
+  ---
+  
+  ## 名前付きルートの使用例
+  
+  `MaterialApp` の `routes` にルート名とウィジェットを登録しておく
+  
+  ```dart
+  MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (context) => HomePage(),
+      '/settings': (context) => SettingsPage(),
+    },
+  );
+  ```
+  
+  画面遷移は
+  
+  ```dart
+  Navigator.pushNamed(context, '/settings');
+  ```
+  
+  ---
+  
+  ## 戻り値を受け取る遷移
+  
+  画面Bから戻る際に結果を返し、画面Aで受け取る例
+  
+  ```dart
+  // 画面A
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ScreenB()),
+  );
+  print('画面Bからの結果: $result');
+  ```
+  
+  ```dart
+  // 画面B
+  Navigator.pop(context, 'データを返す');
+  ```
+  
+  ---
+  
+  ## Navigatorのグローバルキー
+  
+  複雑なアプリで Navigator にアクセスしたい場合に使う
+  
+  ```dart
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  
+  MaterialApp(
+    navigatorKey: navigatorKey,
+    home: HomePage(),
+  );
+  
+  // キーからNavigatorを使う
+  navigatorKey.currentState?.pushNamed('/settings');
+  ```
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/widgets/Navigator-class.html  
+  - https://docs.flutter.dev/cookbook/navigation/navigation-basics  
+  - https://flutter.dev/docs/development/ui/navigation
 
-   [Navigatorクラス](https://github.com/9kaede12/MobileAppDev/blob/main/Navigator.dart)
 </details>
 
 ## Drawerウィジェットについて
@@ -638,44 +992,107 @@ RawMaterialButton(
 <details>
   <summary>内容を見る</summary>
 
-  `Drawer` ウィジェットは、アプリの**サイドメニュー（ナビゲーションドロワー）**を実装するためのFlutter標準のウィジェットです。  
-  画面の左端または右端からスワイプ、あるいはアイコンをタップすることで表示され、  
-  **ナビゲーション機能**や**ユーザー設定項目**などを一覧としてまとめる場面でよく使われます。
+  `Drawer` は画面の左（または右）側からスライドインするナビゲーション用のサイドメニューです。  
+  マテリアルデザインで一般的に使われるナビゲーションメニューとして利用されます。
   
   ---
   
-  ### 特徴
+  ## 基本的な使い方
   
-  - アプリ上部の `AppBar` にメニューアイコン（ハンバーガーアイコン）を表示して開閉することが多い
-  - `ListView`, `ListTile`, `UserAccountsDrawerHeader` などと組み合わせて使うことで柔軟なメニュー構成が可能
-  - ユーザーが画面をスワイプするだけでアクセスできる利便性の高いUIパターン
-  
-  ---
-  
-  ### 使用例（簡略）
+  `Scaffold` の `drawer` プロパティに `Drawer` ウィジェットを指定します。
   
   ```dart
   Scaffold(
-    appBar: AppBar(title: Text('Home')),
+    appBar: AppBar(
+      title: Text('Drawer の例'),
+    ),
     drawer: Drawer(
       child: ListView(
+        padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Text('メニュー', style: TextStyle(color: Colors.white)),
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text(
+              'メニュー',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
           ),
           ListTile(
+            leading: Icon(Icons.home),
             title: Text('ホーム'),
             onTap: () {
-              // ナビゲーション処理
+              // 画面遷移や処理をここに記述
+              Navigator.pop(context); // Drawerを閉じる
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('設定'),
+            onTap: () {
+              Navigator.pop(context);
             },
           ),
         ],
       ),
     ),
-    body: Center(child: Text('メイン画面')),
-  )
+    body: Center(child: Text('Drawerを使ったレイアウト')),
+  );
   ```
+  
+  ---
+  
+  ## 主な構成要素
+  
+  | ウィジェット名   | 説明                                   |
+  |------------------|----------------------------------------|
+  | `Drawer`         | サイドメニュー全体のコンテナ           |
+  | `DrawerHeader`   | Drawerのヘッダー部分（ユーザー情報等） |
+  | `ListView`       | メニュー項目をリスト表示                 |
+  | `ListTile`       | メニューの各アイテム                     |
+  
+  ---
+  
+  ## Drawerの開閉操作
+  
+  - アプリバーの左上に自動的にハンバーガーメニューアイコンが表示される  
+  - アイコンや画面端をスワイプすることで開閉可能  
+  - `Navigator.pop(context)` で Drawer を閉じる
+  
+  ---
+  
+  ## 右側にDrawerを表示する場合
+  
+  `Scaffold` の `endDrawer` プロパティに指定します。
+  
+  ```dart
+  Scaffold(
+    endDrawer: Drawer(
+      // 右側からスライドインするDrawer
+    ),
+  );
+  ```
+  
+  ---
+  
+  ## Drawerのカスタマイズ
+  
+  - 背景色や形状は `Drawer` 内のコンテナや装飾で自由に設定可能  
+  - メニューアイテムは `ListTile` を複数使い、アイコンやテキスト、タップ時の処理を指定する
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/Drawer-class.html  
+  - https://docs.flutter.dev/cookbook/design/drawer  
+  - https://flutter.dev/docs/cookbook/design/navigation-drawer
+
+
 </details>
 
 ## Todoリストの作成
@@ -700,29 +1117,106 @@ RawMaterialButton(
 <details>
   <summary>内容を見る</summary>
 
-  `Future` は、**非同期処理の結果を後から受け取るためのオブジェクト**です。  
-  例えば、ファイルの読み書きやネットワーク通信、時間のかかる処理など、即座に値を返せない関数に使われます。
+  `Future` は Dart における非同期処理の結果を表すオブジェクトです。  
+  非同期処理の完了（成功または失敗）を待ち、その結果を受け取るために使います。
   
   ---
   
-  ### 特徴
+  ## Futureの基本概念
   
-  - `Future<T>` は「将来的に `T` 型の値を返す予定」という意味
-    - 例：`Future<String>`、`Future<File>`、`Future<Directory>` など
-  - 実際の処理完了までに時間がかかるため、`await` を使って待つのが基本
+  - 非同期処理の完了後に値を返すことを約束するオブジェクト  
+  - 処理が成功すれば値を返し、失敗すればエラーを返す  
+  - まだ完了していない処理を表すため、すぐに結果は得られない
   
   ---
   
-  ### 使用例
-  
-  #### 非同期メソッドの定義
+  ## Futureの生成例
   
   ```dart
-  Future<String> fetchMessage() async {
-    await Future.delayed(Duration(seconds: 2));
-    return "取得完了";
+  Future<String> fetchUserOrder() {
+    return Future.delayed(Duration(seconds: 2), () => 'コーヒー');
   }
   ```
+  
+  上記は、2秒後に文字列 `'コーヒー'` を返す Future を返します。
+  
+  ---
+  
+  ## Futureの利用方法
+  
+  ### 1. `then` と `catchError` を使う
+  
+  ```dart
+  fetchUserOrder().then((order) {
+    print('注文: $order');
+  }).catchError((error) {
+    print('エラー: $error');
+  });
+  ```
+  
+  ### 2. `async` / `await` を使う（推奨）
+  
+  ```dart
+  Future<void> example() async {
+    try {
+      String order = await fetchUserOrder();
+      print('注文: $order');
+    } catch (error) {
+      print('エラー: $error');
+    }
+  }
+  ```
+  
+  ---
+  
+  ## Futureの状態
+  
+  | 状態           | 説明                       |
+  |----------------|----------------------------|
+  | Uncompleted    | 処理がまだ完了していない状態 |
+  | Completed      | 処理が成功し結果が得られた状態 |
+  | Completed with Error | 処理が失敗しエラーが発生した状態 |
+  
+  ---
+  
+  ## FutureとUIの連携
+  
+  Flutterでは、`FutureBuilder` ウィジェットを使って非同期処理の結果をUIに反映できます。
+  
+  ```dart
+  FutureBuilder<String>(
+    future: fetchUserOrder(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return CircularProgressIndicator();
+      } else if (snapshot.hasError) {
+        return Text('エラー: ${snapshot.error}');
+      } else if (snapshot.hasData) {
+        return Text('注文: ${snapshot.data}');
+      } else {
+        return Text('データなし');
+      }
+    },
+  );
+  ```
+  
+  ---
+  
+  ## まとめ
+  
+  - `Future` は非同期処理の結果を表現するオブジェクト  
+  - `async` / `await` で直感的に非同期処理を書ける  
+  - UIで非同期処理結果を扱う場合は `FutureBuilder` が便利
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://dart.dev/codelabs/async-await  
+  - https://api.flutter.dev/flutter/widgets/FutureBuilder-class.html  
+  - https://docs.flutter.dev/cookbook/networking/fetch-data
+
+
 </details>
 
 ## 保存先ディレクトリの取得
