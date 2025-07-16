@@ -1,0 +1,5 @@
+dependencies:
+  flutter:
+    sdk: flutter
+  path_provider: any
+  intl: ^0.18.0
