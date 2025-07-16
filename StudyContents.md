@@ -1,5 +1,180 @@
 # 学んだことについて記述していく
 
+## マテリアルデザインについて
+<details>
+  <summary>内容をみる</summary>
+
+  [Material Design](https://m3.material.io/) は Google によって設計されたデザインシステムであり、Flutter ではこれをベースとした UI コンポーネントが豊富に用意されています。
+  
+  Flutterは `MaterialApp` や `Scaffold` など、マテリアルデザインを前提としたウィジェットを多数提供しており、AndroidだけでなくiOSでも一貫性のあるUIが構築可能です。
+  
+  ---
+  
+  主な構成要素
+  
+  Flutter アプリのエントリーポイント。テーマやルーティングの設定が可能。
+  
+  ```dart
+  void main() {
+    runApp(MaterialApp(
+      title: 'My App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    ));
+  }
+  ```
+</details>
+
+## コンストラクタについて
+<details>
+  <summary>内容をみる</summary>
+
+  FlutterはDart言語で書かれており、クラスのインスタンス化時に使う「コンストラクタ」は非常に重要な概念です。このドキュメントでは、Dartの代表的なコンストラクタの書き方を紹介します。
+  
+  ---
+  
+  ## 基本のコンストラクタ
+  
+  ```dart
+  class Person {
+    String name;
+    int age;
+  
+    Person(String name, int age) {
+      this.name = name;
+      this.age = age;
+    }
+  }
+  ```
+  
+  ### 短縮記法
+  
+  ```dart
+  class Person {
+    String name;
+    int age;
+  
+    Person(this.name, this.age);
+  }
+  ```
+  
+  ---
+  
+  ## 名前付きコンストラクタ
+  
+  ```dart
+  class Person {
+    String name;
+    int age;
+  
+    Person(this.name, this.age);
+  
+    Person.guest() {
+      name = 'Guest';
+      age = 0;
+    }
+  }
+  ```
+  
+  ---
+  
+  ## 名前付きパラメータ
+  
+  ```dart
+  class Book {
+    String title;
+    String author;
+  
+    Book({required this.title, required this.author});
+  }
+  
+  void main() {
+    var b = Book(title: '1984', author: 'George Orwell');
+  }
+  ```
+  
+  ---
+  
+  ## デフォルト値
+  
+  ```dart
+  class User {
+    String name;
+    bool isAdmin;
+  
+    User({this.name = 'Guest', this.isAdmin = false});
+  }
+  ```
+  
+  ---
+  
+  ## 初期化リスト（initializer list）
+  
+  ```dart
+  class Point {
+    final int x;
+    final int y;
+  
+    Point(int a, int b) : x = a, y = b;
+  }
+  ```
+  
+  ---
+  
+  ## コンストラクタ内での処理
+  
+  ```dart
+  class Timer {
+    int seconds;
+  
+    Timer(int s) {
+      if (s < 0) {
+        throw ArgumentError('秒数は0以上である必要があります');
+      }
+      seconds = s;
+    }
+  }
+  ```
+  
+  ---
+  
+  ## const コンストラクタ
+  
+  ```dart
+  class Color {
+    final int red;
+    final int green;
+    final int blue;
+  
+    const Color(this.red, this.green, this.blue);
+  }
+  
+  const black = Color(0, 0, 0);
+  ```
+  
+  ---
+  
+  ## コンストラクタの構文まとめ
+  
+  | 構文例                     | 用途                            |
+  |----------------------------|---------------------------------|
+  | `ClassName()`              | 通常のコンストラクタ            |
+  | `ClassName.name()`         | 名前付きコンストラクタ          |
+  | `ClassName({required ...})`| 名前付きパラメータ              |
+  | `: field = value`          | 初期化リスト（final 変数など）  |
+  | `const ClassName(...)`     | イミュータブルな定数生成        |
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://dart.dev/language/constructors
+  - https://docs.flutter.dev/development/data-and-backend/json#creating-model-classes
+
+</details>
+
 ## StatelessWidgetクラスについて
 <details>
   <summary>内容を見る</summary>
