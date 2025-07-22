@@ -2204,3 +2204,136 @@
   - https://docs.flutter.dev/cookbook/design/bottom-navigation
 
 </details>
+
+## ListViewについて
+<details>
+  <summary>内容を見る</summary>
+
+  `ListView` は、**スクロール可能なリスト表示を行うためのウィジェット**です。  
+  リストアイテムが多くても、必要に応じて動的に生成・表示されるため、効率的です。
+  
+  ---
+  
+  ## 主な用途
+  
+  - 縦方向または横方向のスクロールリスト
+  - 長さの決まった／不定なデータの表示
+  - アイテムの動的生成 (`builder`)
+  - リストの区切り (`separator`) やカスタマイズ表示
+  
+  ---
+  
+  ## 基本的な使い方（静的リスト）
+  
+  ```dart
+  ListView(
+    children: [
+      ListTile(title: Text('項目1')),
+      ListTile(title: Text('項目2')),
+      ListTile(title: Text('項目3')),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## `ListView.builder`（動的生成）
+  
+  ```dart
+  ListView.builder(
+    itemCount: items.length,
+    itemBuilder: (context, index) {
+      return ListTile(
+        title: Text(items[index]),
+      );
+    },
+  )
+  ```
+  
+  - **itemCount**: 表示するアイテムの数
+  - **itemBuilder**: 各インデックスに応じてウィジェットを構築
+  
+  ---
+  
+  ## `ListView.separated`（区切り線あり）
+  
+  ```dart
+  ListView.separated(
+    itemCount: items.length,
+    itemBuilder: (context, index) {
+      return ListTile(title: Text(items[index]));
+    },
+    separatorBuilder: (context, index) => Divider(),
+  )
+  ```
+  
+  - 各アイテムの間にウィジェット（例：`Divider`）を挿入可能
+  
+  ---
+  
+  ## 横スクロールのリスト
+  
+  ```dart
+  ListView(
+    scrollDirection: Axis.horizontal,
+    children: [
+      Container(width: 100, color: Colors.red),
+      Container(width: 100, color: Colors.green),
+      Container(width: 100, color: Colors.blue),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## スクロールの挙動を制御するプロパティ
+  
+  | プロパティ             | 説明 |
+  |------------------------|------|
+  | `scrollDirection`      | スクロールの向き（`Axis.vertical` / `Axis.horizontal`） |
+  | `shrinkWrap`           | true にすると内容サイズに応じてリストのサイズを縮小 |
+  | `physics`              | スクロールの物理挙動（例：`BouncingScrollPhysics`） |
+  | `controller`           | スクロール位置を制御・取得するための ScrollController |
+  | `padding`              | 内側の余白 |
+  
+  ---
+  
+  ## 高度な使い方：`ListView` + `ScrollController`
+  
+  ```dart
+  ScrollController _scrollController = ScrollController();
+  
+  ListView.builder(
+    controller: _scrollController,
+    itemCount: 100,
+    itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
+  )
+  ```
+  
+  スクロール位置の取得や自動スクロールに使えます。
+  
+  ---
+  
+  ## 注意点
+  
+  - `ListView.builder` を使うことで、**大量のデータでも効率的に表示可能**
+  - スクロール可能な親要素（例：`SingleChildScrollView`）の中に `ListView` を入れると **レイアウトが壊れる**ことがある → 対処法として `shrinkWrap: true` や `physics: NeverScrollableScrollPhysics()` を設定
+  - ネストされたリストでは高さ指定やラップウィジェットの工夫が必要
+  
+  ---
+  
+  ## 関連ウィジェット
+  
+  - `ListTile`: ListView の1項目を構成する代表的ウィジェット  
+  - `CustomScrollView`: 複雑なスクロールビューを構築可能  
+  - `GridView`: グリッド表示に特化したリスト  
+  - `ReorderableListView`: 項目の並び替えが可能なリスト
+  
+  ---
+  
+  ## 参考ドキュメント
+  
+  - https://api.flutter.dev/flutter/widgets/ListView-class.html  
+  - https://docs.flutter.dev/cookbook/lists/basic-list
+
+</details>
