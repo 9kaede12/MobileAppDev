@@ -1935,3 +1935,272 @@
   - https://docs.flutter.dev/cookbook/forms/dropdown
 
 </details>
+
+## Sliderについて
+<details>
+  <summary>内容を見る</summary>
+
+  `Slider` は、ユーザーが **連続的または離散的な値** を指定できるスライダー入力です。  
+  音量や明るさの調整、数値範囲の選択などに使用されます。
+  
+  ---
+  
+  ## 基本的な使い方（連続値）
+  
+  ```dart
+  double _sliderValue = 20;
+  
+  Slider(
+    value: _sliderValue,
+    min: 0,
+    max: 100,
+    onChanged: (double newValue) {
+      setState(() {
+        _sliderValue = newValue;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名   | 説明 |
+  |----------------|------|
+  | `value`        | 現在の値 |
+  | `min`          | 最小値 |
+  | `max`          | 最大値 |
+  | `onChanged`    | 値が変更されたときのコールバック |
+  | `divisions`    | 分割数（指定すると離散値になる） |
+  | `label`        | 値の表示（`divisions` が指定されたときに有効） |
+  | `activeColor`  | スライダーの有効部分の色 |
+  | `inactiveColor`| スライダーの無効部分の色 |
+  
+  ---
+  
+  ## 離散値での使用（ステップ付き）
+  
+  ```dart
+  double _sliderValue = 2;
+  
+  Slider(
+    value: _sliderValue,
+    min: 1,
+    max: 5,
+    divisions: 4, // 1〜5 の 5 段階
+    label: _sliderValue.round().toString(),
+    onChanged: (double newValue) {
+      setState(() {
+        _sliderValue = newValue;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 無効状態のスライダー
+  
+  ```dart
+  Slider(
+    value: 50,
+    min: 0,
+    max: 100,
+    onChanged: null, // ユーザー操作を無効化
+  )
+  ```
+  
+  ---
+  
+  ## スライダーのカスタマイズ（色）
+  
+  ```dart
+  Slider(
+    value: _sliderValue,
+    min: 0,
+    max: 10,
+    activeColor: Colors.green,
+    inactiveColor: Colors.grey,
+    onChanged: (double value) {
+      setState(() {
+        _sliderValue = value;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 値の表示を工夫する例
+  
+  ```dart
+  Text('値: ${_sliderValue.toStringAsFixed(1)}')
+  ```
+  
+  スライダーの値をリアルタイムに表示するには、別のウィジェット（`Text` など）で `value` を監視するのが一般的です。
+  
+  ---
+  
+  ## 注意点
+  
+  - `Slider` は `StatefulWidget` として使用し、`value` を状態管理する必要があります。
+  - `divisions` を指定しない場合、スライダーは連続値を返します。
+  - `label` はツールチップのように値を表示できますが、`divisions` を設定していないと機能しません。
+  - 同時に複数の値を選ぶ用途には `RangeSlider` を使うことが推奨されます。
+  
+  ---
+  
+  ## 関連ウィジェット
+  
+  - `RangeSlider`：2点間の範囲を選ぶスライダー  
+  - `SliderTheme`：Slider のテーマ・スタイルを詳細にカスタマイズ可能  
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/Slider-class.html  
+  - https://docs.flutter.dev/cookbook/forms/slider  
+  - https://api.flutter.dev/flutter/material/RangeSlider-class.html
+
+</details>
+
+## BottomNavigationについて
+<details>
+  <summary>内容を見る</summary>
+
+  `BottomNavigationBar` は、アプリ下部に配置するナビゲーションバーで、**2～5 個のナビゲーション項目（タブ）を切り替える** UI に用いられます。
+  
+  ---
+  
+  ## 基本的な使い方
+  
+  ```dart
+  int _currentIndex = 0;
+  
+  Scaffold(
+    body: _screens[_currentIndex],
+    bottomNavigationBar: BottomNavigationBar(
+      currentIndex: _currentIndex,
+      onTap: (int index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'ホーム',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          label: '検索',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'マイページ',
+        ),
+      ],
+    ),
+  )
+  ```
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名         | 説明 |
+  |----------------------|------|
+  | `items`              | ナビゲーション項目のリスト（2～5個） |
+  | `currentIndex`       | 現在アクティブなタブのインデックス |
+  | `onTap`              | タブがタップされたときの処理（インデックスが渡される） |
+  | `type`               | バーのタイプ（`fixed` or `shifting`） |
+  | `selectedItemColor`  | 選択中アイテムの色 |
+  | `unselectedItemColor`| 未選択アイテムの色 |
+  | `backgroundColor`    | ナビゲーションバー全体の背景色 |
+  | `iconSize`           | アイコンサイズ |
+  
+  ---
+  
+  ## `type` の違い
+  
+  ### `BottomNavigationBarType.fixed`
+  
+  - アイテム数が **4以下** の場合のデフォルト。
+  - 全ての項目が常に表示される。
+  - 背景色は共有。
+  
+  ```dart
+  type: BottomNavigationBarType.fixed,
+  ```
+  
+  ### `BottomNavigationBarType.shifting`
+  
+  - アイテム数が **4以上** の場合に使用。
+  - 選択されたアイテムに応じて背景色が変化。
+  - アイテムごとに背景色を個別指定可能。
+  
+  ```dart
+  type: BottomNavigationBarType.shifting,
+  items: [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.music_note),
+      label: '音楽',
+      backgroundColor: Colors.blue,
+    ),
+    ...
+  ],
+  ```
+  
+  ---
+  
+  ## アイコンなし or ラベル非表示にする
+  
+  ```dart
+  BottomNavigationBar(
+    showSelectedLabels: false,
+    showUnselectedLabels: false,
+    ...
+  )
+  ```
+  
+  ---
+  
+  ## 複数画面との連携（`IndexedStack` 使用例）
+  
+  ```dart
+  IndexedStack(
+    index: _currentIndex,
+    children: [
+      HomeScreen(),
+      SearchScreen(),
+      ProfileScreen(),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## 注意点
+  
+  - アイテム数は **2〜5個** に制限されています。それ以上は `NavigationRail` や `Drawer` の利用を検討。
+  - バーを動的に変更したい場合、状態管理（`setState`, Provider など）が必要です。
+  - アニメーションやカスタムデザインが必要な場合は、`ConvexAppBar`, `BottomAppBar`, `CustomPainter` なども検討できます。
+  
+  ---
+  
+  ## 関連ウィジェット
+  
+  - [`NavigationBar`](https://api.flutter.dev/flutter/material/NavigationBar-class.html): Material 3 向けの新しい下部ナビゲーション
+  - [`BottomAppBar`](https://api.flutter.dev/flutter/material/BottomAppBar-class.html): より柔軟なカスタムアクションバー
+  - [`TabBar`](https://api.flutter.dev/flutter/material/TabBar-class.html): 上部タブに特化したナビゲーション
+  
+  ---
+  
+  ## 公式ドキュメント
+  
+  - https://api.flutter.dev/flutter/material/BottomNavigationBar-class.html  
+  - https://docs.flutter.dev/cookbook/design/bottom-navigation
+
+</details>
