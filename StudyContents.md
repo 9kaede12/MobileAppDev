@@ -1312,3 +1312,626 @@
   ### Firebaseに登録
   Firebaseにアカウント登録していない場合は、[Firebase](https://firebase.google.com/?hl=ja) このリンクから登録ができます。
 </details>
+
+## TextFieldについて
+<details>
+  <summary>内容を見る</summary>
+
+  `TextField` は Flutter でテキスト入力を行うための基本的なウィジェットです。  
+  フォーム、検索バー、チャット欄など、あらゆる入力インターフェースで使用されます。
+  
+  ---
+  
+  ## 基本的な使い方
+  
+  ```dart
+  TextField(
+    decoration: InputDecoration(
+      labelText: 'ユーザー名',
+      border: OutlineInputBorder(),
+    ),
+  )
+  ```
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名         | 説明 |
+  |----------------------|------|
+  | `controller`         | 入力値を取得・操作するための `TextEditingController` を指定 |
+  | `onChanged`          | 入力値が変更されたときに呼ばれるコールバック |
+  | `onSubmitted`        | キーボードの「完了」や「Enter」が押されたときに呼ばれる |
+  | `decoration`         | プレースホルダやラベル、アイコンなどの装飾を指定 |
+  | `keyboardType`       | 入力タイプ（例: `TextInputType.number`）を指定 |
+  | `obscureText`        | パスワード入力などで文字を伏せる場合に使用（true にする） |
+  | `maxLines`           | 入力可能な行数（デフォルトは1） |
+  | `enabled`            | 入力を無効化する（false にすると読み取り専用） |
+  
+  ---
+  
+  ## 入力値の取得と制御：TextEditingController の利用
+  
+  ```dart
+  final TextEditingController _controller = TextEditingController();
+  
+  TextField(
+    controller: _controller,
+  )
+  
+  ...
+  
+  // 入力値を取得
+  print(_controller.text);
+  
+  // 入力値を設定
+  _controller.text = '初期値';
+  ```
+  
+  ---
+  
+  ## onChanged の利用例
+  
+  ```dart
+  TextField(
+    onChanged: (text) {
+      print('現在の入力: $text');
+    },
+  )
+  ```
+  
+  ---
+  
+  ## パスワード入力にする
+  
+  ```dart
+  TextField(
+    obscureText: true,
+    decoration: InputDecoration(
+      labelText: 'パスワード',
+    ),
+  )
+  ```
+  
+  ---
+  
+  ## 装飾を追加する（InputDecoration）
+  
+  ```dart
+  TextField(
+    decoration: InputDecoration(
+      labelText: '検索',
+      hintText: 'キーワードを入力',
+      prefixIcon: Icon(Icons.search),
+      border: OutlineInputBorder(),
+    ),
+  )
+  ```
+  
+  ---
+  
+  ## TextFormField との違い
+  
+  | ウィジェット名     | 用途・特徴 |
+  |--------------------|------------|
+  | `TextField`        | 軽量な入力欄。単体で使用可能。 |
+  | `TextFormField`    | フォーム用。バリデーションや `Form` と連携可能。 |
+  
+  ---
+  
+  ## 注意点
+  
+  - 複雑なバリデーションやフォーム管理を行う場合は `TextFormField` + `Form` を使うのが推奨
+  - 必要に応じてフォーカス制御には `FocusNode` を使う
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/TextField-class.html  
+  - https://docs.flutter.dev/cookbook/forms/text-input  
+  - https://dart.dev/guides/libraries/library-tour#implementing-advanced-forms
+
+</details>
+
+## Checkboxについて
+<details>
+  <summary>内容を見る</summary>
+
+  `Checkbox` はオン・オフの状態を切り替えるトグル（チェックボックス）ウィジェットです。  
+  ユーザーによる選択・非選択の状態を管理するために使用されます。
+  
+  ---
+  
+  ## 基本的な使い方
+  
+  ```dart
+  bool _isChecked = false;
+  
+  Checkbox(
+    value: _isChecked,
+    onChanged: (bool? newValue) {
+      setState(() {
+        _isChecked = newValue!;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名     | 説明 |
+  |------------------|------|
+  | `value`          | チェック状態（`true` / `false`）を指定 |
+  | `onChanged`      | チェック状態が変更されたときに呼ばれる関数 |
+  | `activeColor`    | チェック時の色 |
+  | `checkColor`     | チェックマーク自体の色 |
+  | `tristate`       | `null` を含む三状態 (`true`, `false`, `null`) を許可するかどうか |
+  
+  ---
+  
+  ## Checkbox と Text を組み合わせる（Row を使用）
+  
+  ```dart
+  Row(
+    children: [
+      Checkbox(
+        value: _isChecked,
+        onChanged: (bool? value) {
+          setState(() {
+            _isChecked = value!;
+          });
+        },
+      ),
+      Text('利用規約に同意する'),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## 三状態チェックボックスの例（`tristate`）
+  
+  ```dart
+  bool? _isChecked = null;
+  
+  Checkbox(
+    value: _isChecked,
+    tristate: true,
+    onChanged: (bool? value) {
+      setState(() {
+        _isChecked = value;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## チェックボックスの無効化（`onChanged: null`）
+  
+  ```dart
+  Checkbox(
+    value: true,
+    onChanged: null, // 無効化されてユーザー操作不可
+  )
+  ```
+  
+  ---
+  
+  ## チェックボックスとリスト（ListTile）を組み合わせる
+  
+  ```dart
+  CheckboxListTile(
+    title: Text('メール通知を受け取る'),
+    value: _isChecked,
+    onChanged: (bool? value) {
+      setState(() {
+        _isChecked = value!;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 注意点
+  
+  - `Checkbox` はステート（状態）を管理するため、`StatefulWidget` 内で使うのが一般的  
+  - 状態の管理には `StatefulWidget` または状態管理パッケージ（Provider, Riverpod など）を利用可能  
+  - ユーザーが誤って無効状態と誤解しないよう、無効化する場合は適切に説明をつけると良い
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/Checkbox-class.html  
+  - https://api.flutter.dev/flutter/material/CheckboxListTile-class.html  
+  - https://docs.flutter.dev/cookbook/forms/checkbox
+
+</details>
+
+## Switchについて
+<details>
+  <summary>内容を見る</summary>
+
+  `Switch` は 2 状態（オン/オフ）を切り替えるためのトグルスイッチです。  
+  設定画面などでよく使われます。
+  
+  ---
+  
+  ## 基本的な使い方
+  
+  ```dart
+  bool _isSwitched = false;
+  
+  Switch(
+    value: _isSwitched,
+    onChanged: (bool value) {
+      setState(() {
+        _isSwitched = value;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名     | 説明 |
+  |------------------|------|
+  | `value`          | スイッチの現在の状態（`true` / `false`）を指定 |
+  | `onChanged`      | 状態が変更されたときに呼ばれる関数 |
+  | `activeColor`    | スイッチがオンのときの色 |
+  | `activeTrackColor` | トラック部分の色（オン時） |
+  | `inactiveThumbColor` | スイッチがオフのときのつまみの色 |
+  | `inactiveTrackColor` | オフ時のトラックの色 |
+  
+  ---
+  
+  ## Switch とテキストの組み合わせ（Row を使用）
+  
+  ```dart
+  Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text('通知を受け取る'),
+      Switch(
+        value: _isSwitched,
+        onChanged: (bool value) {
+          setState(() {
+            _isSwitched = value;
+          });
+        },
+      ),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## 無効化されたスイッチ
+  
+  ```dart
+  Switch(
+    value: true,
+    onChanged: null, // 無効（ユーザー操作不可）
+  )
+  ```
+  
+  ---
+  
+  ## SwitchListTile を使った例
+  
+  ```dart
+  SwitchListTile(
+    title: Text('Bluetooth'),
+    subtitle: Text('Bluetooth機能を有効にする'),
+    value: _isSwitched,
+    onChanged: (bool value) {
+      setState(() {
+        _isSwitched = value;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 注意点
+  
+  - `Switch` は `StatefulWidget` 内で使用して状態を保持・更新するのが基本です  
+  - 単独で使うよりも `SwitchListTile` でラベルや説明と一緒に表示する方が UI 的に親切です  
+  - タップ領域はスイッチのみに限定されるため、`ListTile` で領域を広げることができます
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/Switch-class.html  
+  - https://api.flutter.dev/flutter/material/SwitchListTile-class.html  
+  - https://docs.flutter.dev/cookbook/forms/switch
+
+</details>
+
+## Radioについて
+<details>
+  <summary>内容を見る</summary>
+
+  `Radio` は複数の選択肢の中から **1つだけ** を選ぶためのウィジェットです。  
+  性別選択や支払い方法など、排他的な選択が必要な場面で使われます。
+  
+  ---
+  
+  ## 基本的な使い方
+  
+  ```dart
+  int _selectedValue = 1;
+  
+  Radio(
+    value: 1,
+    groupValue: _selectedValue,
+    onChanged: (int? value) {
+      setState(() {
+        _selectedValue = value!;
+      });
+    },
+  )
+  ```
+  
+  - `value`: この Radio ボタンの値
+  - `groupValue`: 現在選択されている値
+  - `onChanged`: ユーザーが選択を変更したときに呼ばれる
+  
+  ---
+  
+  ## 複数の Radio を並べる
+  
+  ```dart
+  Column(
+    children: <Widget>[
+      Radio(
+        value: 1,
+        groupValue: _selectedValue,
+        onChanged: (int? value) {
+          setState(() {
+            _selectedValue = value!;
+          });
+        },
+      ),
+      Radio(
+        value: 2,
+        groupValue: _selectedValue,
+        onChanged: (int? value) {
+          setState(() {
+            _selectedValue = value!;
+          });
+        },
+      ),
+    ],
+  )
+  ```
+  
+  ---
+  
+  ## ラベル付き：RadioListTile の使用
+  
+  ```dart
+  RadioListTile<int>(
+    title: Text('男性'),
+    value: 1,
+    groupValue: _selectedValue,
+    onChanged: (int? value) {
+      setState(() {
+        _selectedValue = value!;
+      });
+    },
+  )
+  ```
+  
+  - `RadioListTile` を使うことで、ラベルやサブタイトルを含む選択肢が簡単に実装可能
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名     | 説明 |
+  |------------------|------|
+  | `value`          | 選択肢ごとの値 |
+  | `groupValue`     | 現在選ばれている値 |
+  | `onChanged`      | 選択が変わったときに呼ばれるコールバック |
+  | `activeColor`    | 選択中のラジオボタンの色 |
+  | `toggleable`     | 選択済みの値をタップして選択解除可能にする（デフォルト: false） |
+  
+  ---
+  
+  ## 選択肢を列挙型（enum）で扱う例
+  
+  ```dart
+  enum Gender { male, female }
+  
+  Gender _gender = Gender.male;
+  
+  Radio<Gender>(
+    value: Gender.male,
+    groupValue: _gender,
+    onChanged: (Gender? value) {
+      setState(() {
+        _gender = value!;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 無効な状態の Radio（onChanged: null）
+  
+  ```dart
+  Radio(
+    value: 1,
+    groupValue: _selectedValue,
+    onChanged: null, // 無効化
+  )
+  ```
+  
+  ---
+  
+  ## 注意点
+  
+  - `groupValue` を全ての `Radio` に共通で持たせることで、**どの選択肢が選ばれているか** を管理します  
+  - ラジオボタンは「1つだけ選ばせる」用途に限定してください（複数選択には `Checkbox` を使用）  
+  - 複数の選択肢には `Column` や `ListView` を使って縦に並べるのが一般的です
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/Radio-class.html  
+  - https://api.flutter.dev/flutter/material/RadioListTile-class.html  
+  - https://docs.flutter.dev/cookbook/forms/radio
+
+</details>
+
+## DropDownについて
+<details>
+  <summary>内容を見る</summary>
+
+  `DropdownButton` は、選択肢のリストから **1つを選択** するためのドロップダウンメニューを提供するウィジェットです。
+  
+  ---
+  
+  ## 基本的な使い方
+  
+  ```dart
+  String _selectedValue = 'A';
+  
+  DropdownButton<String>(
+    value: _selectedValue,
+    items: <String>['A', 'B', 'C']
+        .map<DropdownMenuItem<String>>((String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+    }).toList(),
+    onChanged: (String? newValue) {
+      setState(() {
+        _selectedValue = newValue!;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 主なプロパティ
+  
+  | プロパティ名         | 説明 |
+  |----------------------|------|
+  | `value`              | 現在選択されている値 |
+  | `items`              | 選択肢のリスト（`DropdownMenuItem` のリスト） |
+  | `onChanged`          | 値が変更されたときに呼ばれるコールバック |
+  | `hint`               | 値が選択されていない場合に表示するヒントウィジェット |
+  | `icon`               | ドロップダウンアイコン（デフォルトは下向き矢印） |
+  | `isExpanded`         | true にすると横幅を親に合わせて拡張 |
+  | `underline`          | ドロップダウンの下線をカスタマイズ |
+  
+  ---
+  
+  ## 値が未選択のときの表示（hint）
+  
+  ```dart
+  String? _selectedValue;
+  
+  DropdownButton<String>(
+    value: _selectedValue,
+    hint: Text('選択してください'),
+    items: ['赤', '青', '緑'].map((String color) {
+      return DropdownMenuItem<String>(
+        value: color,
+        child: Text(color),
+      );
+    }).toList(),
+    onChanged: (String? newValue) {
+      setState(() {
+        _selectedValue = newValue;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 無効化されたドロップダウン（onChanged: null）
+  
+  ```dart
+  DropdownButton<String>(
+    value: 'A',
+    items: ['A', 'B', 'C'].map((String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+    }).toList(),
+    onChanged: null, // ユーザー操作を無効化
+  )
+  ```
+  
+  ---
+  
+  ## 複雑な UI 要素の例（リストにアイコンを含める）
+  
+  ```dart
+  DropdownButton<String>(
+    value: _selectedValue,
+    items: [
+      DropdownMenuItem(
+        value: 'car',
+        child: Row(
+          children: [
+            Icon(Icons.directions_car),
+            SizedBox(width: 8),
+            Text('車'),
+          ],
+        ),
+      ),
+      DropdownMenuItem(
+        value: 'bike',
+        child: Row(
+          children: [
+            Icon(Icons.directions_bike),
+            SizedBox(width: 8),
+            Text('自転車'),
+          ],
+        ),
+      ),
+    ],
+    onChanged: (String? value) {
+      setState(() {
+        _selectedValue = value!;
+      });
+    },
+  )
+  ```
+  
+  ---
+  
+  ## 注意点
+  
+  - `DropdownButton` は必ず `StatefulWidget` で使用し、選択状態を保持する必要があります。
+  - `items` に指定するリストの `value` は、`value` プロパティと一致する必要があります。
+  - メニューが小さい場合でも、`isExpanded: true` を使って UI の幅を整えると見やすくなります。
+  - 項目数が多い場合、スクロールできるカスタムドロップダウンの実装が必要になる場合があります。
+  
+  ---
+  
+  ## 参考リンク
+  
+  - https://api.flutter.dev/flutter/material/DropdownButton-class.html  
+  - https://docs.flutter.dev/cookbook/forms/dropdown
+
+</details>
