@@ -1,7 +1,6 @@
-// main.dart
-
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,7 +15,11 @@ class Record {
   int amount;
   String note;
 
-  Record({required this.date, required this.category, required this.amount, this.note = ''});
+  Record(
+      {required this.date,
+        required this.category,
+        required this.amount,
+        this.note = ''});
 
   Map<String, dynamic> toJson() => {
     'date': date.toIso8601String(),
@@ -52,6 +55,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Record> records = [];
   final String _recordFile = 'records.json';
+
+  int selectedYear = DateTime.now().year;
+  int selectedMonth = DateTime.now().month;
 
   @override
   void initState() {
@@ -100,9 +106,51 @@ class _HomePageState extends State<HomePage> {
     _saveRecords();
   }
 
+  void _showCupertinoDatePicker() {
+    DateTime initialDate = DateTime(selectedYear, selectedMonth, 1);
+    showCupertinoModalPopup(
+      context: context,
+      builder: (_) => Container(
+        height: 250,
+        color: Colors.white,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 200,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: initialDate,
+                minimumDate: DateTime(2000, 1),
+                maximumDate: DateTime(2100, 12),
+                onDateTimeChanged: (DateTime newDate) {
+                  setState(() {
+                    selectedYear = newDate.year;
+                    selectedMonth = newDate.month;
+                  });
+                },
+              ),
+            ),
+            CupertinoButton(
+              child: Text('閉じる'),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final formatter = NumberFormat('#,###');
+
+    // 選択した年月の収入と支出を抽出
+    final filteredRecords = records.where((r) =>
+    r.date.year == selectedYear && r.date.month == selectedMonth).toList();
+
+    final incomeRecords = filteredRecords.where((r) => r.amount >= 0).toList();
+    final expenseRecords = filteredRecords.where((r) => r.amount < 0).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('家計簿アプリ'),
@@ -116,23 +164,93 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: records.isEmpty
-          ? Center(child: Text('記録がありません'))
-          : ListView.builder(
-        itemCount: records.length,
-        itemBuilder: (_, index) {
-          final r = records[index];
-          final sign = r.amount >= 0 ? '+' : '-';
-          final amount = formatter.format(r.amount.abs());
-          return ListTile(
-            title: Text('${r.category}  $sign$amount円'),
-            subtitle: Text('${DateFormat('yyyy/MM/dd').format(r.date)}  ${r.note}'),
-            trailing: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () => _deleteRecord(index),
+      body: Column(
+        children: [
+          SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton.icon(
+                icon: Icon(Icons.calendar_today),
+                label: Text('$selectedYear 年 $selectedMonth 月'),
+                onPressed: _showCupertinoDatePicker,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: Colors.green[50],
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('収入', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green[800])),
+                        ),
+                        Expanded(
+                          child: incomeRecords.isEmpty
+                              ? Center(child: Text('収入の記録なし'))
+                              : ListView.builder(
+                              itemCount: incomeRecords.length,
+                              itemBuilder: (_, index) {
+                                final r = incomeRecords[index];
+                                final amount = formatter.format(r.amount);
+                                return ListTile(
+                                  title: Text('${r.category}  +$amount 円'),
+                                  subtitle: Text('${DateFormat('yyyy/MM/dd').format(r.date)}  ${r.note}'),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () {
+                                      _deleteRecord(records.indexOf(r));
+                                    },
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                VerticalDivider(width: 1),
+                Expanded(
+                  child: Container(
+                    color: Colors.red[50],
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('支出', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red[800])),
+                        ),
+                        Expanded(
+                          child: expenseRecords.isEmpty
+                              ? Center(child: Text('支出の記録なし'))
+                              : ListView.builder(
+                              itemCount: expenseRecords.length,
+                              itemBuilder: (_, index) {
+                                final r = expenseRecords[index];
+                                final amount = formatter.format(r.amount.abs());
+                                return ListTile(
+                                  title: Text('${r.category}  -$amount 円'),
+                                  subtitle: Text('${DateFormat('yyyy/MM/dd').format(r.date)}  ${r.note}'),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () {
+                                      _deleteRecord(records.indexOf(r));
+                                    },
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          );
-        },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -257,7 +375,8 @@ class _AddRecordPageState extends State<AddRecordPage> {
           child: ListView(
             children: [
               ListTile(
-                title: Text('日付: ${DateFormat('yyyy/MM/dd').format(_selectedDate)}'),
+                title:
+                Text('日付: ${DateFormat('yyyy/MM/dd').format(_selectedDate)}'),
                 trailing: Icon(Icons.calendar_today),
                 onTap: () async {
                   final d = await showDatePicker(
@@ -273,8 +392,11 @@ class _AddRecordPageState extends State<AddRecordPage> {
                 decoration: InputDecoration(labelText: 'カテゴリ'),
                 value: _categories.contains(_category) ? _category : null,
                 items: [
-                  ..._categories.map((cat) => DropdownMenuItem(value: cat, child: Text(cat))),
-                  DropdownMenuItem(value: '新しいカテゴリを追加', child: Text('＋ 新しいカテゴリを追加')),
+                  ..._categories
+                      .map((cat) => DropdownMenuItem(value: cat, child: Text(cat))),
+                  DropdownMenuItem(
+                      value: '新しいカテゴリを追加',
+                      child: Text('＋ 新しいカテゴリを追加')),
                 ],
                 onChanged: (value) {
                   if (value == '新しいカテゴリを追加') {
@@ -283,7 +405,8 @@ class _AddRecordPageState extends State<AddRecordPage> {
                     setState(() => _category = value ?? '');
                   }
                 },
-                validator: (value) => value == null || value.isEmpty ? 'カテゴリを選んでください' : null,
+                validator: (value) =>
+                value == null || value.isEmpty ? 'カテゴリを選んでください' : null,
               ),
               SwitchListTile(
                 title: Text('収入として記録'),
@@ -293,7 +416,13 @@ class _AddRecordPageState extends State<AddRecordPage> {
               TextFormField(
                 decoration: InputDecoration(labelText: '金額'),
                 keyboardType: TextInputType.number,
-                validator: (v) => v == null || v.isEmpty ? '金額を入力してください' : int.tryParse(v) == null ? '数値で入力してください' : null,
+                validator: (v) => v == null
+                    ? '金額を入力してください'
+                    : v.isEmpty
+                    ? '金額を入力してください'
+                    : int.tryParse(v) == null
+                    ? '数値で入力してください'
+                    : null,
                 onSaved: (v) => _amount = int.tryParse(v!),
               ),
               TextFormField(
