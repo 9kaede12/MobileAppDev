@@ -2337,3 +2337,106 @@
   - https://docs.flutter.dev/cookbook/lists/basic-list
 
 </details>
+
+<details>
+  <summary>内容を見る</summary>
+
+  ---
+  
+  ## データクラス（Data Class）とは？
+  
+  Dart では、**特定のデータ構造を表すためのクラス（= データクラス）** を自分で定義します。以下はその典型例です：
+  
+  ```dart
+  class User {
+    final String name;
+    final int age;
+  
+    User({required this.name, required this.age});
+  
+    @override
+    String toString() => 'User(name: $name, age: $age)';
+  }
+  ```
+  
+  - `final` を使ってイミュータブル（変更不可）なプロパティを定義
+  - `toString()` をオーバーライドするとデバッグ出力が見やすくなる
+  
+  ---
+  
+  ## `shuffle` メソッドとは？
+  
+  Dart の `List` クラスには、**要素の順序をランダムに並べ替える `shuffle()` メソッド** が用意されています。
+  
+  ```dart
+  List<int> numbers = [1, 2, 3, 4, 5];
+  numbers.shuffle();
+  print(numbers); // 例: [3, 5, 1, 4, 2]
+  ```
+  
+  - **インプレース操作**（元のリストを直接変更）
+  - デフォルトでは `Random()` によるランダム性が使用される
+  
+  ---
+  
+  ## `shuffle` とデータクラスの組み合わせ例
+  
+  ```dart
+  class Item {
+    final String title;
+    final int value;
+  
+    Item({required this.title, required this.value});
+  
+    @override
+    String toString() => '$title: $value';
+  }
+  
+  void main() {
+    List<Item> items = [
+      Item(title: 'A', value: 1),
+      Item(title: 'B', value: 2),
+      Item(title: 'C', value: 3),
+    ];
+  
+    items.shuffle();
+    print(items); // 順序がランダムになる
+  }
+  ```
+  
+  ---
+  
+  ## カスタム乱数シードでの `shuffle`
+  
+  同じシャッフル結果を再現したい場合は、`Random(seed)` を渡す：
+  
+  ```dart
+  import 'dart:math';
+  
+  List<String> names = ['Taro', 'Jiro', 'Hanako'];
+  names.shuffle(Random(42));
+  ```
+  
+  ---
+  
+  ## 注意点
+  
+  - `shuffle()` は元のリストを変更する（元の順序を残したい場合は `List.from()` を使う）
+  - データクラスには `==` や `hashCode` のオーバーライドも必要になる場合がある（比較やコレクションでの利用時）
+  
+  ---
+  
+  ## 関連知識
+  
+  - `List.sort()`：昇順や独自ルールで並べ替える
+  - `List.reversed`：逆順に取得（非破壊）
+  - `collection` パッケージの `shuffle` 関数（より柔軟な操作に対応）
+  
+  ---
+  
+  ## 公式リファレンス
+  
+  - https://api.dart.dev/stable/dart-core/List/shuffle.html
+  - https://dart.dev/guides/language/language-tour#using-constructors
+
+</details>
